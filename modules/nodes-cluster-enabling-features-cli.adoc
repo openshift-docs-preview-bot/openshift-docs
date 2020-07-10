@@ -2,25 +2,24 @@
 //
 // * nodes/nodes-cluster-enabling-features.adoc
 
-[id="nodes-cluster-enabling-features-cluster_{context}"]
-= Enabling feature sets using the web console
+[id="nodes-cluster-enabling-features-cli_{context}"]
+= Enabling feature sets using the CLI
 
-You can use the {product-title} web console to enable feature sets for all nodes in the cluster by editing the Feature Gate custom resource (CR).
+You can use the {product-title} CLI to enable feature sets for all nodes in the cluster.
 
 .Procedure
 
 To enable feature sets:
 
-. In the {product-title} web console, switch to the *Administration* -> *Custom Resource Definitions* page.
-
-. On the *Custom Resource Definitions* page, click *FeatureGate*.
-
-. On the *featuregates.config.openshift.io* page, click the *Instances* tab.
-
-. Click the *cluster* instance then click the *YAML* tab.
-
-. Edit the *cluster* instance to add the `featureSet` parameter and specific feature sets:
+. Edit the Feature Gate custom resource (CR), named `cluster`, in the `openshift-config` project:
 +
+[source,terminal]
+----
+$ oc edit featuregate cluster -n openshift-config
+----
++
+.Sample Feature Gate custom resource
+[source,yaml]
 ----
 apiVersion: config.openshift.io/v1
 kind: FeatureGate

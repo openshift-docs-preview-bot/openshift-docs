@@ -2,48 +2,255 @@
 //
 // * nodes/nodes-scheduler-node-selector.adoc
 
-[id="nodes-scheduler-node-selector-about_{context}"]
-= Understanding node selectors
+[id="nodes-scheduler-node-selectors-about_{context}"]
+= About node selectors
 
-Using _node selectors_, you can ensure that pods are only placed onto nodes with specific labels. As a cluster administrator, you can
-use the Pod Node Constraints admission controller to set a policy that prevents users without the `pods/binding` permission 
-from using node selectors to schedule pods.
+You can use node selectors on pods and labels on nodes to control where the pod is scheduled.
 
-The `nodeSelectorLabelBlacklist` admission controller field gives you control over the labels that certain roles can specify in a pod configuration's
-`nodeSelector` field. Users, service accounts, and groups that have the
-`pods/binding` permission role can specify any node selector. Those without the
-`pods/binding` permission are prohibited from setting a `nodeSelector` for any
-label that appears in `nodeSelectorLabelBlacklist`.
+With node selectors, {product-title} schedules the pods on nodes that contain matching labels.
 
-For example, an {product-title} cluster might consist of five data
-centers spread across two regions. In the U.S., `us-east`, `us-central`, and
-`us-west`; and in the Asia-Pacific region (APAC), `apac-east` and `apac-west`.
-Each node in each geographical region is labeled accordingly. For example,
-`region: us-east`.
+You can use specific node selectors to place specific pods on specific nodes, default cluster-wide node selectors to place new pods on specific nodes anywhere in the cluster, and project node selectors to place new pods in a project on specific nodes in that project.
+
+As a cluster administrator, you can create an infrastructure where application developers should be deploying pods only onto the nodes closest to their geographical location by including a node selector in every pod they create. For example, your cluster might consist of five data centers spread across two regions. In the U.S., label the nodes as `us-east`, `us-central`, or `us-west`. In the Asia-Pacific region (APAC), label the nodes as *apac-east* or *apac-west*. The developers can add a `region: us-east` node selector to the pods they create to ensure the pods get scheduled on those nodes.
+
+A pod is not created or scheduled if the `Pod` object contains a node selector that is not on  specific node, set as the cluster-wide node selector, or not a project node selector.  When you create a pod from that spec, you receive an error similar to the following message:
+
+.Example error message
+[source,terminal]
+----
+Error from server (Forbidden): error when creating "pod.yaml": pods "pod-4" is forbidden: pod node label selector conflicts with its project node label selector
+----
+
+[IMPORTANT]
+====
+If you are using node selectors and node affinity in the same pod configuration, the following rules control pod placement onto nodes:
+
+* If you configure both `nodeSelector` and `nodeAffinity`, both conditions must be satisfied for the pod to be scheduled onto a candidate node.
+
+* If you specify multiple `nodeSelectorTerms` associated with `nodeAffinity` types, then the pod can be scheduled onto a node if one of the `nodeSelectorTerms` is satisfied.
+
+* If you specify multiple `matchExpressions` associated with `nodeSelectorTerms`, then the pod can be scheduled onto a node only if all `matchExpressions` are satisfied.
+====
+
+Node selectors on specific nodes::
+
+You can use node selector labels on pods to control where the pod is scheduled.
+
+With node selectors, {product-title} schedules the pods on nodes that contain matching labels.
+
+To add node selectors to an existing pod, add a node selector to the controlling object for that node, such as
+a ReplicaSet, Daemonset, or StatefulSet. Any existing pods under that controlling object are recreated on a node
+with a matching label. If you are creating a new pod, you can add the node selector directly
+to the pod spec.
+
+You can add labels to a node or MachineConfig, but the labels will not persist if the node or machine goes down.
+Adding the label to the MachineSet ensures that new nodes or machines will have the label.
 
 [NOTE]
 ====
-ifdef::openshift-enterprise,openshift-webscale,openshift-origin[]
-See Updating Labels on Nodes for details on assigning labels.
-endif::openshift-enterprise,openshift-webscale,openshift-origin[]
-ifdef::openshift-dedicated[]
-(request changes by opening a support case on the
-https://access.redhat.com/support/[Red Hat Customer Portal])
-endif::openshift-dedicated[]
+You cannot add a node selector directly to an existing scheduled pod.
 ====
 
-As a cluster administrator, you can create an infrastructure where application
-developers should be deploying pods only onto the nodes closest to their
-geographical location. You can create a node selector, grouping the U.S. data centers into `superregion: us` and the APAC
-data centers into `superregion: apac`.
+.Sample Pod object with node selectors
+[source,yaml]
+----
+apiVersion: v1
+kind: Pod
 
-To maintain an even loading of resources per data center, you can add the
-desired `region` to the `nodeSelectorLabelBlacklist` section of a master
-configuration. Then, whenever a developer located in the U.S. creates a pod, it
-is deployed onto a node in one of the regions with the `superregion: us` label.
-If the developer tries to target a specific region for their pod (for example,
-`region: us-east`), they receive an error. If they try again, without the
-node selector on their pod, it can still be deployed onto the region they tried
-to target, because `superregion: us` is set as the project-level node selector,
-and nodes labeled `region: us-east` are also labeled `superregion: us`.
+....
+
+spec:
+  nodeSelector: <1>
+    region: east
+    type: user-node
+----
+<1> Two node selectors that can be used in a `Node` object.
+
+The following `Node` object has a label with the same key/value as the node selector in the pod above. 
+
+[source,yaml]
+----
+kind: Node
+apiVersion: v1
+metadata:
+  name: ip-10-0-131-14.ec2.internal
+  selfLink: /api/v1/nodes/ip-10-0-131-14.ec2.internal
+  uid: 7bc2580a-8b8e-11e9-8e01-021ab4174c74
+  resourceVersion: '478704'
+  creationTimestamp: '2019-06-10T14:46:08Z'
+  labels:
+    beta.kubernetes.io/os: linux
+    failure-domain.beta.kubernetes.io/zone: us-east-1a
+    node.openshift.io/os_version: '4.5'
+    node-role.kubernetes.io/worker: ''
+    failure-domain.beta.kubernetes.io/region: us-east-1
+    node.openshift.io/os_id: rhcos
+    beta.kubernetes.io/instance-type: m4.large
+    kubernetes.io/hostname: ip-10-0-131-14
+    region: east 
+    beta.kubernetes.io/arch: amd64
+    type: user-node <1>
+----
+<1> Label that matches the `Pod` node selector.
+
+When you create the pod using the example pod spec, it can be scheduled on the example node.
+
+Default cluster-wide node selectors::
+
+With cluster-wide node selectors, when you create a pod in that cluster, {product-title} adds the default node selectors to the pod and schedules
+the pod on nodes with matching labels. 
+
+For example, the Scheduler has the cluster-wide `region=east` and `type=user-node` node selectors:
+
+.Example Scheduler Operator Custom Resource
+[source,yaml]
+----
+apiVersion: config.openshift.io/v1
+kind: Scheduler
+metadata:
+  name: cluster
+...
+
+spec:
+  defaultNodeSelector: type=user-node,region=east <1>
+...
+
+----
+
+A node in that cluster has the `type=user-node,region=east` labels:
+
+.Example Node object
+[source,yaml]
+----
+apiVersion: v1
+kind: Node
+metadata:
+  name: ci-ln-qg1il3k-f76d1-hlmhl-worker-b-df2s4
+...
+  labels:
+    region: east
+    type: user-node
+...
+
+---- 
+
+If you create a pod in that cluster, the pod is created with the cluster-wide node selector and is scheduled on the labeled node:
+
+.Example Pod object
+[source,terminal]
+----
+apiVersion: v1
+kind: Pod
+...
+
+spec:
+  nodeSelector:
+    region: east
+...
+
+----
+
+[source,terminal]
+.Example pod list with the pod on the labeled node
+----
+NAME     READY   STATUS    RESTARTS   AGE   IP           NODE                                       NOMINATED NODE   READINESS GATES
+pod-s1   1/1     Running   0          20s   10.131.2.6   ci-ln-qg1il3k-f76d1-hlmhl-worker-b-df2s4   <none>           <none>
+----
+
+[NOTE]
+====
+If the project where you create the pod has a project node selector, that selector takes preference over a cluster-wide node selector. Your pod is not created or scheduled if the node selector in the Pod spec does not use the project node selector.
+====
+
+Project node selectors::
+
+You can use node selectors in a project together with labels on nodes to constrain all pods created in that project to the labeled nodes.
+
+When you create a pod in this project, {product-title} adds the node selectors to the pods in the project and schedules the pods on a node with matching labels in the project. If there is a cluster-wide default node selector, a project node selector takes preference.
+
+You add labels to a project by editing the `Namespace` object to add the `openshift.io/node-selector` parameter, which contains the label definitions. You add labels to a node by editing the Node object, a MachineSet, or a MachineConfig. Adding the label to the MachineSet ensures that if the node or machine goes down, new nodes have the label. Labels added to a node or MachineConfig do not persist if the node or machine goes down.
+
+[NOTE]
+====
+You can add additional key/value pairs to a pod. But you cannot add a different value for a default project key.
+====
+
+For example, the following project has the `region=east` node selector:
+
+.Example Namespace object
+[source,yaml]
+----
+apiVersion: v1
+kind: Namespace
+metadata:
+  annotations:
+    openshift.io/node-selector: "region=east"
+...
+
+----
+
+The following node has the `type=user-node,region=east` labels:
+
+.Example Node object
+[source,yaml]
+----
+apiVersion: v1
+kind: Node
+metadata:
+  name: ci-ln-qg1il3k-f76d1-hlmhl-worker-b-df2s4
+...
+  labels:
+    region: east
+    type: user-node
+...
+
+---- 
+
+If you create a pod in this example project, the pod is created with the project node selector and is scheduled on the labeled node:
+
+.Example Pod object
+[source,yaml]
+----
+apiVersion: v1
+kind: Pod
+metadata:
+...
+spec:
+  nodeSelector:
+    region: east
+    type: user-node
+...
+----
+
+[source,terminal]
+.Example pod list with the pod on the labeled node
+----
+NAME     READY   STATUS    RESTARTS   AGE   IP           NODE                                       NOMINATED NODE   READINESS GATES
+pod-s1   1/1     Running   0          20s   10.131.2.6   ci-ln-qg1il3k-f76d1-hlmhl-worker-b-df2s4   <none>           <none>
+----
+
+A pod in the project is not created or scheduled if the pod contains different node selectors. For example, if you deploy the following pod into the example project, it will not be created:
+
+.Example Pod object with an invalid node selector
+[source,yaml]
+----
+apiVersion: v1
+kind: Pod
+...
+
+spec:
+  nodeSelector:
+    region: west
+
+....
+----
+
+When you create the pod, you receive an error similar to the following message:
+
+.Example error message
+[source,terminal]
+----
+Error from server (Forbidden): error when creating "pod.yaml": pods "pod-4" is forbidden: pod node label selector conflicts with its project node label selector
+----
+
 

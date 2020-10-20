@@ -17,6 +17,9 @@ to the `Pod` spec.
 You can add labels to a node or machine config, but the labels will not persist if the node or machine goes down.
 Adding the label to the machine set ensures that new nodes or machines will have the label.
 
+You can add labels to a node or MachineConfig, but the labels will not persist if the node or machine goes down.
+Adding the label to the MachineSet ensures that new nodes or machines will have the label.
+
 [NOTE]
 ====
 You cannot add a node selector directly to an existing scheduled pod.
@@ -169,7 +172,7 @@ spec:
 
 * To add a node selector to a specific pod, add the selector to the `Pod` object directly:
 +
-.Example `Pod` object
+.Example Pod object
 [source,yaml]
 ----
 apiVersion: v1
@@ -200,3 +203,4 @@ spec:
     region: east
     type: user-node
 ----
+

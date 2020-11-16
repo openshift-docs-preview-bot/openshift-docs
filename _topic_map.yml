@@ -1130,6 +1130,22 @@ Topics:
     File: images-other-jenkins
   - Name: Jenkins agent
     File: images-other-jenkins-agent
+  - Name: Source-to-image
+    Dir: source_to_image
+    Distros: openshift-enterprise,openshift-webscale,openshift-origin
+    Topics:
+    - Name: Java
+      File: using-images-source-to-image-java
+    - Name: Node.js
+      File: using-images-source-to-image-nodejs
+    - Name: Perl
+      File: using-images-source-to-image-perl
+    - Name: PHP
+      File: using-images-source-to-image-php
+    - Name: Python
+      File: using-images-source-to-image-python
+    - Name: Ruby
+      File: using-images-source-to-image-ruby
 - Name: Building and deploying a DPDK payload using the s2i image
   File: cnf-building-and-deploying-a-dpdk-payload
   Distros: openshift-webscale

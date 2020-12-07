@@ -1,0 +1,9 @@
+// Module included in the following assemblies:
+//
+
+[id="nw-ovn-ipsec-encryption_{context}"]
+= Encryption protocol and tunnel mode for IPsec
+
+The encrypt cipher used is `AES-GCM-16-256`. The integrity check value (ICV) is `16` bytes. The key length is `256` bits.
+
+The IPsec tunnel mode used is _Transport mode_, a mode that encryptions end-to-end communication.

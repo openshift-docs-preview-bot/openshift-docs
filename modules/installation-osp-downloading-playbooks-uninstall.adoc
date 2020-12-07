@@ -1,0 +1,31 @@
+// Module included in the following assemblies:
+// * installing/installing_openstack/uninstalling-openstack-user.adoc
+
+[id="installation-osp-downloading-playbooks_{context}"]
+= Downloading the removal playbooks
+
+Download Ansible playbooks that you can use to uninstall {product-title} from your own {rh-openstack-first} infrastructure.
+
+.Prerequisites
+
+* The curl command-line tool is available on your machine.
+
+.Procedure
+
+. To download the playbooks to your working directory, run the following script from a command line:
++
+[source,terminal]
+----
+$ xargs -n 1 curl -O <<< '                                
+        https://raw.githubusercontent.com/openshift/installer/release-4.7/upi/openstack/common.yaml                                     
+        https://raw.githubusercontent.com/openshift/installer/release-4.7/upi/openstack/down-bootstrap.yaml                             
+        https://raw.githubusercontent.com/openshift/installer/release-4.7/upi/openstack/down-compute-nodes.yaml                         
+        https://raw.githubusercontent.com/openshift/installer/release-4.7/upi/openstack/down-control-plane.yaml                         
+        https://raw.githubusercontent.com/openshift/installer/release-4.7/upi/openstack/down-load-balancers.yaml                        
+        https://raw.githubusercontent.com/openshift/installer/release-4.7/upi/openstack/down-network.yaml                               
+        https://raw.githubusercontent.com/openshift/installer/release-4.7/upi/openstack/down-security-groups.yaml                       
+        https://raw.githubusercontent.com/openshift/installer/release-4.7/upi/openstack/down-containers.yaml                            
+        https://raw.githubusercontent.com/openshift/installer/release-4.7/upi/openstack/inventory.yaml'
+----
+
+The playbooks are downloaded to your machine.

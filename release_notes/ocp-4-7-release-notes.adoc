@@ -79,6 +79,13 @@ You can now remove or rotate the GCP admin-level credential that the xref:../ope
 [id="ocp-4-7-networking"]
 === Networking
 
+[id="ocp-4-7-ovn-kubernetes-ipsec-support"]
+==== OVN-Kubernetes IPsec support for encrypted traffic between pods
+
+During cluster installation, you can configure the OVN-Kubernetes cluster network provider with IPsec enabled. With IPsec enabled, all cluster network traffic between pods is sent over an encrypted IPsec tunnel.
+
+The IPsec tunnel is not used for network traffic between pods that are configured to use the host network. However, traffic sent from a pod on the host network and received by a pod that uses the cluster network does use the IPsec tunnel.
+//link
 
 [id="ocp-4-7-storage"]
 === Storage

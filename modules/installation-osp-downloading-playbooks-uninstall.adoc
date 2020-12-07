@@ -1,5 +1,6 @@
 // Module included in the following assemblies:
 // * installing/installing_openstack/uninstalling-openstack-user.adoc
+:playbook-version: 4.7
 
 [id="installation-osp-downloading-playbooks_{context}"]
 = Downloading the removal playbooks
@@ -14,18 +15,20 @@ Download Ansible playbooks that you can use to uninstall {product-title} from yo
 
 . To download the playbooks to your working directory, run the following script from a command line:
 +
-[source,terminal]
+[source,terminal,subs=attributes+]
 ----
 $ xargs -n 1 curl -O <<< '                                
-        https://raw.githubusercontent.com/openshift/installer/release-4.7/upi/openstack/common.yaml                                     
-        https://raw.githubusercontent.com/openshift/installer/release-4.7/upi/openstack/down-bootstrap.yaml                             
-        https://raw.githubusercontent.com/openshift/installer/release-4.7/upi/openstack/down-compute-nodes.yaml                         
-        https://raw.githubusercontent.com/openshift/installer/release-4.7/upi/openstack/down-control-plane.yaml                         
-        https://raw.githubusercontent.com/openshift/installer/release-4.7/upi/openstack/down-load-balancers.yaml                        
-        https://raw.githubusercontent.com/openshift/installer/release-4.7/upi/openstack/down-network.yaml                               
-        https://raw.githubusercontent.com/openshift/installer/release-4.7/upi/openstack/down-security-groups.yaml                       
-        https://raw.githubusercontent.com/openshift/installer/release-4.7/upi/openstack/down-containers.yaml                            
-        https://raw.githubusercontent.com/openshift/installer/release-4.7/upi/openstack/inventory.yaml'
+        https://raw.githubusercontent.com/openshift/installer/release-{playbook-version}/upi/openstack/common.yaml                                     
+        https://raw.githubusercontent.com/openshift/installer/release-{playbook-version}/upi/openstack/down-bootstrap.yaml                             
+        https://raw.githubusercontent.com/openshift/installer/release-{playbook-version}/upi/openstack/down-compute-nodes.yaml                         
+        https://raw.githubusercontent.com/openshift/installer/release-{playbook-version}/upi/openstack/down-control-plane.yaml                         
+        https://raw.githubusercontent.com/openshift/installer/release-{playbook-version}/upi/openstack/down-load-balancers.yaml                        
+        https://raw.githubusercontent.com/openshift/installer/release-{playbook-version}/upi/openstack/down-network.yaml                               
+        https://raw.githubusercontent.com/openshift/installer/release-{playbook-version}/upi/openstack/down-security-groups.yaml                       
+        https://raw.githubusercontent.com/openshift/installer/release-{playbook-version}/upi/openstack/down-containers.yaml                            
+        https://raw.githubusercontent.com/openshift/installer/release-{playbook-version}/upi/openstack/inventory.yaml'
 ----
+
+
 
 The playbooks are downloaded to your machine.

@@ -10,19 +10,7 @@ Download Ansible playbooks that you can use to uninstall {product-title} from yo
 .Prerequisites
 
 * The curl command-line tool is available on your machine.
-* You have the `inventory.yaml` file that you used to install the cluster. 
-+
-[NOTE]
-====
-If you do not have the `inventory.yaml` file, you can download it by entering this command in a command line:
-
-[source,terminal,subs=attributes+]
-----
-curl -O https://raw.githubusercontent.com/openshift/installer/release-{playbook-version}/upi/openstack/inventory.yaml
-----
-
-Modify the values in the file to match your cluster configuration before proceeding.
-====
+* You have the playbooks that you used to install the cluster. 
 
 .Procedure
 

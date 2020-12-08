@@ -11,7 +11,7 @@ Create the network resources that an {product-title} on {rh-openstack-first} ins
 
 * Python 3 is installed on your machine
 * You downloaded the modules in "Downloading playbook dependencies"
-* You downloaded the playbooks in "Downloading installation playbooks"
+* You downloaded the playbooks in "Downloading the installation playbooks"
 
 .Procedure
 

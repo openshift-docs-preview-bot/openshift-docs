@@ -10,7 +10,7 @@ After standing up the control plane, create compute machines.
 
 .Prerequisites
 * The `inventory.yaml`, `common.yaml`, and `compute-nodes.yaml` Ansible playbooks are in a common directory.
-** If you need these files, download them in "Downloading installation playbooks."
+** If you need these files, download them in "Downloading the installation playbooks."
 * The `metadata.yaml` file that the installation program created is in the same directory as the Ansible playbooks.
 * The control plane is active.
 

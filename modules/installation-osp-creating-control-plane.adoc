@@ -11,7 +11,7 @@ Create three control plane machines by using the Ignition config files that you 
 
 * The infrastructure ID from the installation program's metadata file is set as an environment variable (`$INFRA_ID`).
 * The `inventory.yaml`, `common.yaml`, and `control-plane.yaml` Ansible playbooks are in a common directory.
-** If you need these files, copy them from "Downloading installation playbooks."
+** If you need these files, copy them from "Downloading the installation playbooks."
 * The three Ignition files created in "Creating control plane Ignition config files."
 
 .Procedure

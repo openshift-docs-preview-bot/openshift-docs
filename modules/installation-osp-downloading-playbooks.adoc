@@ -32,7 +32,7 @@ The playbooks are downloaded to your machine.
 
 [IMPORTANT]
 ====
-During the installation process, you modify the `inventory.yaml` file to configure your deployment. 
+During the installation process, you modify the playbooks to configure your deployment. 
 
-To assist in cluster removal, retain this file after installation. 
+To assist in cluster removal, retain these files after installation. 
 ====

@@ -29,3 +29,10 @@ $ xargs -n 1 curl -O <<< '
 ----
 
 The playbooks are downloaded to your machine.
+
+[IMPORTANT]
+====
+During the installation process, you modify the `inventory.yaml` file to configure your deployment. 
+
+To assist in cluster removal, retain this file after installation. 
+====

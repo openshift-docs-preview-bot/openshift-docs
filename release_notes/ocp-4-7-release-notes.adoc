@@ -124,7 +124,7 @@ You can now deploy a cluster with Secure Boot when using installer-provisioned i
 === Networking
 
 [id="ocp-4-7-ovn-kubernetes-migration"]
-==== Expanded platform support for migrating from the OpenShift SDN cluster network provider to the OVN-Kubernetes cluster network provider 
+==== Expanded platform support for migrating from the OpenShift SDN cluster network provider to the OVN-Kubernetes cluster network provider
 
 A xref:../networking/ovn_kubernetes_network_provider/migrate-from-openshift-sdn.adoc#migrate-from-openshift-sdn[migration to the OVN-Kubernetes cluster network provider] is now supported on installer-provisioned clusters on the following platforms:
 
@@ -227,6 +227,57 @@ For more information, see xref:../nodes/pods/nodes-pods-priority.html#non-preemp
 [id="ocp-4-7-monitoring"]
 === Monitoring
 
+[id="ocp-4-7-monitoring-prometheus-operator-alertmanagerconfig-crd-"]
+==== `AlertmanagerConfig` custom resource definition in Prometheus Operator not supported
+
+Modifying Alertmanager configurations by using the `AlertmanagerConfig` custom resource definition (CRD) in Prometheus Operator is not supported.
+
+For more information, see xref:../monitoring/configuring-the-monitoring-stack.html#support-considerations_configuring-the-monitoring-stack[Support considerations for monitoring].
+
+[id="ocp-4-7-monitoring-alerting-rule-changes"]
+==== Alerting rule changes
+
+{product-title} 4.7 includes the following alerting rule changes:
+
+* The `etcdBackendQuotaLowSpace` alert is added. The critical alert provides notification if the database size of an etcd cluster exceeds the defined quota on an etcd instance.
+* The `etcdHighFsyncDurations` alert is added. The critical alert provides notification if the 99th percentile fsync durations of an etcd cluster are too high.
+* The `etcdExcessiveDatabaseGrowth` alert is added. The warning alert provides notification if there is an observed surge in etcd writes that caused a 50% increase in database size on an etcd instance over a four-hour period.
+* The `NodeClockNotSynchronising` alert is updated to prevent false positives in environments that use the chrony time service (chronyd).
+* The `NodeNetworkReceiveErrs` alert is updated to ensure that the alert does not fire when only a small number of errors are reported. The rule now uses the ratio of errors to total packets instead of the absolute number of errors.
+* The `NodeNetworkTransmitErrs` alert is updated to ensure that the alert does not fire when only a small number of errors are reported. The rule now uses the ratio of errors to total packets instead of the absolute number of errors.
+*
+
+[NOTE]
+====
+Red Hat does not guarantee backward compatibility for metrics, recording rules, or alerting rules.
+====
+
+[id="ocp-4-7-monitoring-namespace-by-pod-and-pod-total-Grafana-dashboards"]
+==== Namespace By Pod and Pod Total Grafana dashboards
+
+The Namespace By Pod and Pod Total networking Grafana dashboards are enabled. // What are these dashboards used for?
+
+[id="ocp-4-7-monitoring-prometheus-config-reloader-memory-limits"]
+==== `prometheus-config-reloader` memory limit removed for monitoring user defined projects
+
+The memory limit was removed on the Prometheus Operator `prometheus-config-reloader` container in the `openshift-user-workload-monitoring` namespace for monitoring user defined projects. This update prevents OOM kill of the `prometheus-config-reloader` container because it used more memory than the defined limit.
+
+[id="ocp-4-7-monitoring-hwmon-hardware-telemetry-bare-metal"]
+==== HWMon data collection for hardware telemetry for bare metal clusters
+
+HWMon data collection is enabled for hardware health telemetry such as CPU temperature and fan speeds for bare metal clusters.
+
+[id="ocp-4-7-remove-tech-preview-config-user-workload-monitoring"]
+==== Removed deprecated configuration for monitoring your own services
+
+In {product-title} {product-version}, the previous Technology Preview configuration that enabled users to monitor their own services is now removed and not supported.
+
+See xref:../monitoring/understanding-the-monitoring-stack.adoc#understanding-the-monitoring-stack[Understanding the monitoring stack] for more information on monitoring user defined projects.
+
+[id="ocp-4-7-thanos-query-log-level-config"]
+==== `logLevel` configuration field for Thanos Querier
+
+You can now configure the Thanos Querier `logLevel` field for purposes such as debugging.
 
 [id="ocp-4-7-scale"]
 === Scale

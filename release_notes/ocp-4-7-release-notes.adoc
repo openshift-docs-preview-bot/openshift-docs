@@ -368,6 +368,12 @@ This script removes unauthenticated subjects from the following cluster role bin
 +
 (link:https://bugzilla.redhat.com/show_bug.cgi?id=1821771[*BZ#1821771*])
 
+* Currently, installation on IBM z15 and LinuxONE III fails. As a workaround, add the option `dfltcc=off` to `boot.parm` via the command line. (link:https://bugzilla.redhat.com/show_bug.cgi?id=1903383[*BZ#1903382*])
+
+* Currently, OCP nodes installed on FCP-based SCSI storage might crash. As a workaround, use DASD-based storage for the guest usage. (link:https://bugzilla.redhat.com/show_bug.cgi?id=1899762[*BZ#1899762*])
+
+* When installing {product-title} on IBM Z with KVM, the recommended memory of 8 GB for OCP nodes might not be sufficient. (link:https://bugzilla.redhat.com/show_bug.cgi?id=1908875[*BZ#1908875*])
+
 [id="ocp-4-7-asynchronous-errata-updates"]
 == Asynchronous errata updates
 
@@ -397,3 +403,101 @@ Issued: 2021-xx-xx
 Space precluded documenting all of the container images for this release in the advisory. See the following article for notes on the container images in this release:
 
 link:https://access.redhat.com/solutions/<ARTICLE_ID>[{product-title} 4.7.0 container image list]
+
+[id="ocp-4-7-ibm-z"]
+==== IBM Z and LinuxONE
+
+With this release, IBM Z and LinuxONE is now compatible with {product-title} {product-version}. See xref:../installing/installing_ibm_z/installing-ibm-z.adoc#installing-ibm-z[Installing a cluster on IBM Z and LinuxONE] for installation instructions.
+
+With this release, KVM on  {op-system-base} 8.3 or later is supported as a hypervisor for user-provisioned installation of {product-title} {product-version} on IBM Z and LinuxONE.  See xref:../installing/installing_ibm_z/installing-ibm-z-kvm.adoc#installing-ibm-z-kvm[Installing a cluster with {op-system-base} KVM on IBM Z and LinuxONE] for installation instructions.
+
+[discrete]
+===== Restrictions
+
+Note the following restrictions for {product-title} on IBM Z and LinuxONE:
+
+* {product-title} for IBM Z does not include the following Technology Preview features:
+** Log forwarding
+** Precision Time Protocol (PTP) hardware
+** CSI volume snapshots
+
+* The following {product-title} features are unsupported:
+** {product-title} Virtualization
+** CodeReady Containers (CRC)
+** {product-title} Metering
+** Multus CNI plug-in
+** FIPS cryptography
+** Encrypting data stored in etcd
+** Automatic repair of damaged machines with machine health checking
+** Tang mode disk encryption during {product-title} deployment
+** {product-title} Serverless
+** Helm command-line interface (CLI) tool
+** Controlling overcommit and managing container density on nodes
+** etcd cluster Operator
+** CSI volume cloning
+** NVMe
+
+* Worker nodes must run {op-system-first}.
+* Persistent shared storage must be provisioned by using either NFS or other supported storage protocols
+* Persistent non-shared storage must be provisioned using local storage, like iSCSI, FC, or LSO with DASD/FCP.
+* These features are available only for {product-title} on IBM Z for {product-version}:
+** HyperPAV enabled on IBM System Z /LinuxONE for the virtual machines for FICON attached ECKD storage
+
+[discrete]
+===== Supported features
+
+With this release, the following features are supported on IBM Z and LinuxONE:
+
+* Persistent storage using iSCSI
+* Persistent storage using Fibre Channel
+* Persistent storage using local volumes (Local Storage Operator)
+* {product-title} Do (odo)
+* {product-title} Pipelines TP
+* {product-title} Service Mesh
+* CodeReady Workspaces
+* Raw Block
+* z/VM Emulated FBA devices on SCSI disks
+* Multipathing
+* OVN-Kubernetes with an initial installation of {product-title} 4.7
+
+
+[id="ocp-4-7-ibm-power"]
+==== IBM Power Systems
+
+With this release, IBM Power Systems are now compatible with {product-title} {product-version}. See xref:../installing/installing_ibm_power/installing-ibm-power.adoc#installing-ibm-power_installing-ibm-power[Installing a cluster on IBM Power Systems] or xref:../installing/installing_ibm_power/installing-restricted-networks-ibm-power.adoc#installing-restricted-networks-ibm-power_installing-restricted-networks-ibm-power[Installing a cluster on IBM Power Systems in a restricted network].
+
+[discrete]
+===== Restrictions
+
+Note the following restrictions for {product-title} on IBM Power Systems:
+
+* The following {product-title} features are unsupported:
+** {product-title} Metering
+** {product-title} Serverless
+** {product-title} Virtualization
+** CodeReady Containers (CRC)
+
+* Worker nodes must run {op-system-first}.
+* Persistent storage must be of the Filesystem mode using local volumes, Network File System (NFS), or Container Storage Interface (CSI)
+
+[discrete]
+===== Supported Features
+
+* Currently, four Operators are supported:
+** Cluster-Logging-Operator
+** Cluster-NFD-Operator
+** Elastic Search-Operator
+** Local Storage Operator
+
+* {product-title} Service Mesh
+* {product-title} Do (odo)
+* {product-title} Pipelines TP
+* CodeReady Workspaces
+* Persistent storage using iSCSI
+* Persistent storage using Fibre Channel
+* HostPath
+* Raw Block
+* Multipathing
+* OVN-Kubernetes with an initial installation of {product-title} 4.7
+
+

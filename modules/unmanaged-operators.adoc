@@ -2,6 +2,7 @@
 //
 // * architecture/architecture-installation.adoc
 // * updating/updating-cluster-between-minor.adoc
+// * installing/understanding-installations.adoc
 
 [id="unmanaged-operators_{context}"]
 = Support policy for unmanaged Operators

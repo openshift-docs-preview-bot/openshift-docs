@@ -25,14 +25,26 @@ $ xargs -n 1 curl -O <<< '
         https://raw.githubusercontent.com/openshift/installer/release-{playbook-version}/upi/openstack/control-plane.yaml                                                        
         https://raw.githubusercontent.com/openshift/installer/release-{playbook-version}/upi/openstack/inventory.yaml                                  
         https://raw.githubusercontent.com/openshift/installer/release-{playbook-version}/upi/openstack/network.yaml                                    
-        https://raw.githubusercontent.com/openshift/installer/release-{playbook-version}/upi/openstack/security-groups.yaml'
+        https://raw.githubusercontent.com/openshift/installer/release-{playbook-version}/upi/openstack/security-groups.yaml
+        https://raw.githubusercontent.com/openshift/installer/release-{playbook-version}/upi/openstack/down-bootstrap.yaml                             
+        https://raw.githubusercontent.com/openshift/installer/release-{playbook-version}/upi/openstack/down-compute-nodes.yaml                         
+        https://raw.githubusercontent.com/openshift/installer/release-{playbook-version}/upi/openstack/down-control-plane.yaml                         
+        https://raw.githubusercontent.com/openshift/installer/release-{playbook-version}/upi/openstack/down-load-balancers.yaml                        
+        https://raw.githubusercontent.com/openshift/installer/release-{playbook-version}/upi/openstack/down-network.yaml                               
+        https://raw.githubusercontent.com/openshift/installer/release-{playbook-version}/upi/openstack/down-security-groups.yaml                       
+        https://raw.githubusercontent.com/openshift/installer/release-{playbook-version}/upi/openstack/down-containers.yaml'
 ----
 
 The playbooks are downloaded to your machine.
 
 [IMPORTANT]
 ====
-During the installation process, you modify the playbooks to configure your deployment. 
+During the installation process, you can modify the playbooks to configure your deployment. 
 
-To assist in cluster removal, retain these files after installation. 
+Retain all playbooks for the life of your cluster. You must have the playbooks to remove your {product-title} cluster from {rh-openstack}.
+====
+
+[IMPORTANT]
+====
+You must match any edits you make in the `bootstrap.yaml`, `compute-nodes.yaml`, `control-plane.yaml`, `network.yaml`, and `security-groups.yaml` files to the corresponding playbooks that are prefixed with `down-`. For example, edits to the `bootstrap.yaml` file must be reflected in the `down-bootstrap.yaml` file, too. If you do not edit both files, the supported cluster removal process will fail.
 ====

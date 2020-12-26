@@ -51,6 +51,7 @@ include::modules/installation-osp-creating-control-plane.adoc[leveloffset=+1]
 include::modules/cli-logging-in-kubeadmin.adoc[leveloffset=+1]
 include::modules/installation-osp-deleting-bootstrap-resources.adoc[leveloffset=+1]
 include::modules/installation-osp-creating-compute-machines.adoc[leveloffset=+1]
+include::modules/installation-osp-configuring-sr-iov.adoc[leveloffset=+2]
 include::modules/installation-approve-csrs.adoc[leveloffset=+1]
 include::modules/installation-osp-verifying-installation.adoc[leveloffset=+1]
 

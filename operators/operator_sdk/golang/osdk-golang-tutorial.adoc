@@ -1,0 +1,34 @@
+[id="osdk-golang-tutorial"]
+= Tutorial for Go-based Operators
+include::modules/common-attributes.adoc[]
+:context: osdk-golang-tutorial
+
+toc::[]
+
+This tutorial outlines Go programming language support in the Operator SDK and walks Operator authors through building an example Go-based Operator for Memcached, a distributed key-value store, and managing its lifecycle. The tutorial goes into greater detail than the quickstart.
+
+This is accomplished using two centerpieces of the Operator Framework: Operator SDK (the `operator-sdk` CLI tool and `controller-runtime` library API) and Operator Lifecycle Manager (OLM).
+
+include::modules/osdk-golang-tutorial-prereqs.adoc[leveloffset=+1]
+
+include::modules/osdk-golang-create-project.adoc[leveloffset=+1]
+include::modules/osdk-golang-manager.adoc[leveloffset=+2]
+include::modules/osdk-golang-multi-group-apis.adoc[leveloffset=+2]
+
+include::modules/osdk-golang-create-api-controller.adoc[leveloffset=+1]
+include::modules/osdk-golang-define-api.adoc[leveloffset=+2]
+include::modules/osdk-golang-generate-crd.adoc[leveloffset=+2]
+
+include::modules/osdk-golang-implement-controller.adoc[leveloffset=+1]
+
+include::modules/osdk-golang-build-run.adoc[leveloffset=+1]
+include::modules/osdk-golang-run-locally.adoc[leveloffset=+2]
+include::modules/osdk-golang-run-in-cluster.adoc[leveloffset=+2]
+include::modules/osdk-bundling-deploying-using-olm.adoc[leveloffset=+2]
+
+include::modules/osdk-golang-create-cr.adoc[leveloffset=+1]
+
+[id="osdk-golang-tutorial-addtl-resources"]
+== Additional resources
+
+- See xref:../../../operators/operator_sdk/osdk-appendices.adoc#osdk-project-scaffolding-layout_operator-appendices[Appendices] to learn about the project directory structures created by the Operator SDK.

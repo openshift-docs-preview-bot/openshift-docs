@@ -1,23 +1,11 @@
 // Module included in the following assemblies:
 //
-// * operators/operator_sdk/osdk-getting-started.adoc
-// * operators/operator_sdk/osdk-ansible.adoc
-// * operators/operator_sdk/osdk-helm.adoc
+// * operators/operator_sdk/osdk-installing-cli.adoc
 
 [id="osdk-installing-cli_{context}"]
-= Installing the Operator SDK CLI
+= Installing on Linux
 
-The Operator SDK has a CLI tool that assists developers in creating, building, and deploying a new Operator project. You can install the SDK CLI on your workstation so you are prepared to start authoring your own Operators.
-
-[NOTE]
-====
-This guide uses link:https://github.com/kubernetes/minikube#installation[minikube] v0.25.0+ as the local Kubernetes cluster and link:https://quay.io/[Quay.io] for the public registry.
-====
-
-[id="osdk-installing-cli-gh-release_{context}"]
-== Installing from GitHub release
-
-You can download and install a pre-built release binary of the Operator SDK CLI from the project on GitHub.
+You can install the OpenShift SDK CLI binary on Linux by using the following procedure.
 
 .Prerequisites
 
@@ -34,6 +22,52 @@ endif::[]
 
 .Procedure
 
+. Navigate to the link:https://mirror.openshift.com/pub/openshift-v4/clients/[OpenShift mirror site] and choose the Operator SDK folder for your operating system and architecture.
+
+. Download the `operator-sdk.tar.gz` file.
+
+. Unpack the archive:
++
+[source,terminal]
+----
+$ tar xvzf operator-sdk.tar.gz
+----
+
+. Place the extracted `operator-sdk` binary in a directory that is on your `PATH`:
++
+[source,terminal]
+----
+$ chmod +x operator-sdk-<release_version>-x86_64-linux-gnu
+----
++
+[source,terminal]
+----
+$ sudo cp operator-sdk-<release_version>-x86_64-linux-gnu /usr/local/bin/operator-sdk
+----
++
+[source,terminal]
+----
+$ rm operator-sdk-<release_version>-x86_64-linux-gnu
+----
++
+[TIP]
+====
+To check your `PATH`:
+
+[source,terminal]
+----
+$ echo $PATH
+----
+====
+
+. After you install the CLI, verify it is available:
++
+[source,terminal]
+----
+$ operator-sdk version
+----
+
+////
 . Set the release version variable:
 +
 [source,terminal]
@@ -266,3 +300,4 @@ This installs the CLI binary `operator-sdk` at *_$GOPATH/bin_*.
 ----
 $ operator-sdk version
 ----
+////

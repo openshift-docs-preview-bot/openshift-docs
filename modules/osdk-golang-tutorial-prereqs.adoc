@@ -1,0 +1,10 @@
+// Module included in the following assemblies:
+//
+// * operators/operator_sdk/golang/osdk-golang-tutorial.adoc
+
+[id="osdk-golang-tutorial-prereqs_{context}"]
+= Prerequisites
+
+- Operator SDK CLI installed on a development workstation
+- OpenShift CLI (`oc`) v{product-version}+ installed
+- Logged into a {product-title} {product-version} cluster with `oc` using an account with `cluster-admin` permissions

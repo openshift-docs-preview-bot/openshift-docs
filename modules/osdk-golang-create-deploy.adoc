@@ -1,0 +1,136 @@
+// Module included in the following assemblies:
+//
+// * operators/operator_sdk/golang/osdk-quickstart.adoc
+
+[id="osdk-golang-create-deploy_{context}"]
+= Creating and deploying a Go-based Operator
+
+Operator authors can follow this procedure to walk through an example for building and deploying a simple Memcached Operator.
+
+.Prerequisites
+
+- Operator SDK CLI installed on a development workstation
+- OpenShift CLI (`oc`) v{product-version}+ installed
+- Logged into a {product-title} {product-version} cluster with `oc` using an account with `cluster-admin` permissions
+
+.Procedure
+
+. *Create a project.*
+
+.. Create and change into a directory for your project:
++
+[source,terminal]
+----
+$ mkdir memcached-operator
+----
++
+[source,terminal]
+----
+$ cd memcached-operator
+----
+
+.. Run the `operator-sdk init` command with the Go plug-in to initialize the project:
++
+[source,terminal]
+----
+$ operator-sdk init \
+    --domain=example.com \
+    --repo=github.com/example-inc/memcached-operator
+----
+
+.. To enable your Operator to run on {product-title}, edit the `config/manager/manager.yaml` file and replace the following line:
++
+[source,yaml]
+----
+runAsUser: 65532
+----
++
+with:
++
+[source,yaml]
+----
+runAsNonRoot: true
+----
++
+[NOTE]
+====
+This step is a temporary workaround. For more information, see link:https://bugzilla.redhat.com/show_bug.cgi?id=1914406#c1[BZ#1914406].
+====
+
+. *Create an API.*
++
+Create a simple Memcached API:
++
+[source,terminal]
+----
+$ operator-sdk create api \
+    --group cache \
+    --version v1 \
+    --kind Memcached \
+    --resource=true \
+    --controller=true
+----
+
+. *Build and push the Operator image.*
++
+Use the default `Makefile` targets to build and push your Operator. Set `IMG` with a pull spec for your image, using a registry you can push to:
++
+[source,terminal]
+----
+$ make docker-build docker-push IMG=<registry>/<user>/<image_name>:<tag>
+----
++
+[NOTE]
+====
+To allow the cluster pull the image, the repository must be set as public or you must configure an image pull secret.
+====
+
+. *Run the Operator.*
++
+Install the CRD and deploy the project to the cluster. Set `IMG` to the image that you pushed:
++
+[source,terminal]
+----
+$ make install
+----
++
+[source,terminal]
+----
+$ make deploy IMG=<registry>/<user>/<image_name>:<tag>
+----
+
+. *Create a sample custom resource (CR).*
+
+.. Create a sample CR:
++
+[source,terminal]
+----
+$ oc apply -f config/samples/cache_v1_memcached.yaml \
+    -n memcached-operator-system
+----
+
+.. Watch for the CR be reconciled by the Operator:
++
+[source,terminal]
+----
+$ oc logs deployment.apps/memcached-operator-controller-manager \
+    -n memcached-operator-system \
+    -c manager
+----
+
+. *Clean up.*
+
+.. Delete the CR to uninstall Memcached:
++
+[source,terminal]
+----
+$ oc delete -f config/samples/cache_v1_memcached.yaml \
+    -n memcached-operator-system
+----
+
+.. Uninstall the Operator and its CRDs:
++
+[source,terminal]
+----
+$ kustomize build config/default | oc delete -f -
+----

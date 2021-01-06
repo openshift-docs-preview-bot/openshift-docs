@@ -9,13 +9,13 @@
 ifeval::["{context}" == "virt-edit-vms"]
 :virt-vm:
 :object: virtual machine
-:object-gui: Virtual Machine
+:object-gui: Virtual Machines
 endif::[]
 
 ifeval::["{context}" == "virt-editing-vm-template"]
 :virt-vm-template:
 :object: virtual machine template
-:object-gui: Virtual Machine Template
+:object-gui: Templates
 endif::[]
 
 [id="virt-vm-add-disk_{context}"]
@@ -27,8 +27,8 @@ Use this procedure to add a virtual disk to a {object}.
 .Procedure
 
 . Click *Workloads* -> *Virtualization* from the side menu.
-. Click the *{object-gui}s* tab.
-. Select a {object} to open the *{object-gui} Overview* screen.
+. Click the *{object-gui}* tab.
+. Select a {object} to open the *Virtual Machine Overview* pane.
 . Click the *Disks* tab.
 . Click *Add Disk* to open the *Add Disk* window.
 . In the *Add Disk* window, specify the *Source*, *Name*, *Size*, *Interface*, *Type*, and *Storage Class*.

@@ -4,8 +4,6 @@ include::modules/virt-document-attributes.adoc[]
 :context: virt-deleting-vm-template
 toc::[]
 
-You can delete a virtual machine template in the web console.
+Using the web console, you can delete any virtual machine template that was created from a Red Hat template or by using the interactive wizard. Red Hat virtual machine templates cannot be deleted.
 
 include::modules/virt-deleting-template-web.adoc[leveloffset=+1]
-
-

@@ -12,7 +12,7 @@ endif::[]
 ifeval::["{context}" == "virt-editing-vm-template"]
 :virt-vm-template:
 :object: virtual machine template
-:object-gui: Virtual Machine Template
+:object-gui: Templates
 endif::[]
 
 [id="virt-vm-add-nic_{context}"]
@@ -24,8 +24,8 @@ Use this procedure to add a network interface to a {object}.
 .Procedure
 
 . Click *Workloads* -> *Virtualization* from the side menu.
-. Click the *{object-gui}s* tab.
-. Select a {object} to open the *{object-gui} Overview* screen.
+. Click the *{object-gui}* tab.
+. Select a {object} to open the *Virtual Machine Overview* screen.
 . Click the *Network Interfaces* tab.
 . Click *Add Network Interface*.
 . In the *Add Network Interface* window, specify the *Name*, *Model*, *Network*, *Type*,

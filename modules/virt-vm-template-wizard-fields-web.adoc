@@ -1,12 +1,12 @@
 // Module included in the following assemblies:
 //
-// * virt/virtual_machines/virt-create-vms.adoc
 // * virt/virtual_machines/importing_vms/virt-importing-vmware-vm.adoc
+// * virt/vm_templates/virt-creating-vm-template.adoc
 
 // VM wizard includes additional options to VM template wizard
 // Call appropriate attribute in the assembly
 
-[id="virt-vm-wizard-fields-web_{context}"]
+[id="virt-vm-template-wizard-fields-web_{context}"]
 ifdef::virtualmachine[]
 = Virtual machine wizard fields
 endif::[]
@@ -31,6 +31,15 @@ ifdef::vmtemplate[]
 |Template provider
 |
 |The name of the user who is creating the template for the cluster or any meaningful name that identifies this template.
+endif::[]
+
+ifdef::vmtemplate[]
+.2+|Template support
+|No additional support
+|This template does not have additional support in the cluster.
+
+|Support by template provider
+|This template is supported by the template provider.
 endif::[]
 
 |Description
@@ -66,19 +75,19 @@ endif::[]
 |Tiny, Small, Medium, Large, Custom
 |Presets that determine the amount of CPU and memory allocated to the virtual machine. The presets displayed for *Flavor* are determined by the operating system.
 
-.2+|Workload Type
-
-|High-Performance
-|A virtual machine configuration that is optimized for high-performance workloads.
-
-|Server
-|Balances performance and it is compatible with a wide range of server workloads.
+.3+|Workload Type
 
 |Desktop
 |A virtual machine configuration for use on a desktop. Ideal for consumption on a small scale. Recommended for use with the web console.
 
+|Server
+|Balances performance and it is compatible with a wide range of server workloads.
+
+|High-Performance
+|A virtual machine configuration that is optimized for high-performance workloads.
+
 ifdef::virtualmachine[]
-|Start virtual machine on creation
+|Start this virtual machine after creation.
 |
 |Select to automatically start the virtual machine upon creation.
 endif::[]

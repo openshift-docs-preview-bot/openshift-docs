@@ -461,6 +461,8 @@ The value can also be the name of an existing Glance image, for example `my-rhco
 |Properties to add to the installer-uploaded ClusterOSImage in Glance. This property is ignored if `platform.openstack.clusterOSImage` is set to an existing Glance image.
 
 You can use this property to exceed the default persistent volume (PV) limit for {rh-openstack} of 26 PVs per node. To exceed the limit, set the `hw_scsi_model` property value to `virtio-scsi` and the `hw_disk_bus` value to  `scsi`.
+
+You can also use this property to enable the QEMU guest agent by including the `hw_qemu_guest_agent` property with a value of `yes`.
 |A list of key-value string pairs. For example, `["hw_scsi_model": "virtio-scsi", "hw_disk_bus": "scsi"]`.
 
 |`platform.openstack.defaultMachinePlatform`

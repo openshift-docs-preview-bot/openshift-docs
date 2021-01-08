@@ -1,0 +1,37 @@
+// Module included in the following assemblies:
+//
+// * virt/install/preparing-cluster-for-virt.adoc
+
+[id="virt-cluster-resource-requirements{context}"]
+= Additional hardware requirements for {VirtProductName}
+
+
+{VirtProductName} is an add-on to {product-title} and imposes additional overhead that you need to take into account when planning a cluster. Each cluster machine must meet the following hardware requirements in addition to the {product-title} requirements.
+
+.Memory
+
+----
+Memory overhead per virtual machine = (1.002 * requested memory) + 146 MiB  \
+                + (8 * number of vCPUs) + (16 MiB * number of graphics devices)
+----
+
+Add 1 GiB to the above result if your environment includes a Single Root I/O Virtualization (SR-IOV) network device or a Graphics Processing Unit (GPU).
+
+----
+Cluster memory overhead = 2179 MiB + (366 MiB * number of nodes) \
+               + memory overhead per virtual machine
+----
+
+
+.CPU
+
+CPU overhead per virtual machine is subjective. If dedicated CPUs are requested, there is a 1:1 impact on cluster CPU requirement. Otherwise there is no rule of thumb about how many CPUs a virtual machine would require.
+
+
+.Storage
+
+----
+Storage overhead per virtual machine = 11.12 GB or 10.36 GiB
+----
+
+For example, as a cluster administrator, if you plan to host 10 virtual machines in the cluster, each with 1 GiB of RAM and 2 vCPUs, the memory impact across the cluster per the above calculations would be 11.68 GiB.

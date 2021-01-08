@@ -1,0 +1,65 @@
+// Module included in the following assemblies:
+//
+// * nodes/nodes-nodes-resources-cpus
+
+[id="nodes-nodes-resources-cpus-reserve_{context}"]
+= Reserving CPUs for nodes
+
+To explicitly define a list of CPUs that are reserved for control plane nodes or worker nodes, create a `KubeletConfig` custom resource (CR) to define the `reserved-cpus` parameter. This list supersedes the CPU counts that might be specified using the `--system-reserved` and `--kube-reserved` parameters.
+
+.Procedure
+
+. Obtain the label associated with the static `MachineConfigPool` CRD for the type of node you want to configure:
++
+[source,terminal]
+----
+$ oc describe machineconfigpool <name>
+----
++
+For example:
++
+[source,terminal]
+----
+$ oc describe machineconfigpool worker
+----
++
+.Example output
+[source,yaml]
+----
+Name:         worker
+Namespace:    
+Labels:       machineconfiguration.openshift.io/mco-built-in=
+              pools.operator.machineconfiguration.openshift.io/worker= <1>
+Annotations:  <none>
+API Version:  machineconfiguration.openshift.io/v1
+Kind:         MachineConfigPool
+...
+----
+<1> Get the `worker` or `master` label. 
+
+. Create the `KubeletConfig` CR YAML file similar to the following:
++
+[source,yaml]
+---- 
+apiVersion: machineconfiguration.openshift.io/v1
+kind: KubeletConfig
+metadata:
+  name: set-reserved-cpus <1>  
+spec:
+  kubeletConfig:
+    reservedSystemCPUs: "0,1,2,3" <2>
+  machineConfigPoolSelector:
+    matchLabels:
+      pools.operator.machineconfiguration.openshift.io/worker: "" <3>
+----
+<1> Specify a name for the CR.
+<2> Specify the core IDs for the CPUs you want to reserve for the nodes.
+<3> Specify the label from the MCP.
+
+. Create the CR object:
++
+[source,terminal]
+----
+$ oc create -f <file-name>.yaml
+----
+

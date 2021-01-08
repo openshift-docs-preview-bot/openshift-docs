@@ -81,22 +81,6 @@ As a result, we strongly recommended that users only enforce node allocatable fo
 `pods` by default, and set aside appropriate reservations for system daemons to maintain
 overall node reliability.
 
-== Reserving system CPUs
-
-When using static cpu manager policy, knowing explicitly what CPUs are reserved for 
-the system and which CPUs are used for user containers is very important.
-
-You can use the `--reserved-cpus` flag to explicitly define a list of CPUs that are 
-reserved for the system. This list supersedes the CPU counts in `--system-reserved` 
-and `--kube-reserved`.
-
-For example, on a system with 24 CPUs, you could reserve CPUs numbered 0,1,2,3 the system
-and use CPUs 4-23 for the NFV containers.
-
----
-oc set env KubeletConfig/set-allocatable reserved-cpus=0,1,2,3	
----
-
 [id="allocate-eviction-thresholds_{context}"]
 == Understanding Eviction Thresholds
 

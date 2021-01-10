@@ -1,0 +1,12 @@
+// Module included in the following assemblies:
+//
+// web_console/odc-about-web-terminal.adoc
+
+[id="odc-using-web-terminal_{context}"]
+= Using the web terminal
+
+After the *Web Terminal* Operator is installed, you can use the web terminal as follows:
+
+* Use the command line terminal icon on the upper right of the console to launch the web terminal. An, in context <confirm with sergei and abhi> web terminal, that uses your credentials, is displayed at the bottom of the screen.
+* Open the terminal on a new tab, minimize the terminal window, or re-size it using the splitter bar.
+* Use the pre-installed CLI tools like `oc`, `kubectl`, `odo`, `kn`, `tkn`, `helm`, `kubens`, and `kubectx` in the web terminal.

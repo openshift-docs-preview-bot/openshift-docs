@@ -19,4 +19,4 @@ include::modules/nodes-nodes-resources-cpus-reserve.adoc[leveloffset=+1]
 
 * For information on the static CPU manager policy, see xref:../../scalability_and_performance/using-cpu-manager.adoc[Using CPU Manager].
 
-* For more information on the `--system-reserved` and `--kube-reserved` parameters, see xref:../../nodes/nodes/nodes-nodes-resources-configuring.html#nodes-nodes-resources-configuring-about_nodes-nodes-resources-configuring[Allocating resources for nodes in an {product-title} cluster].
+* For more information on the `systemReserved` and `kubeReserved` parameters, see xref:../../nodes/nodes/nodes-nodes-resources-configuring.html#nodes-nodes-resources-configuring-about_nodes-nodes-resources-configuring[Allocating resources for nodes in an {product-title} cluster].

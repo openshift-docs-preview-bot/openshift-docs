@@ -5,7 +5,7 @@
 [id="nodes-nodes-resources-cpus-reserve_{context}"]
 = Reserving CPUs for nodes
 
-To explicitly define a list of CPUs that are reserved for control plane nodes or worker nodes, create a `KubeletConfig` custom resource (CR) to define the `reserved-cpus` parameter. This list supersedes the CPU counts that might be specified using the `--system-reserved` and `--kube-reserved` parameters.
+To explicitly define a list of CPUs that are reserved for control plane nodes or worker nodes, create a `KubeletConfig` custom resource (CR) to define the `reserved-cpus` parameter. This list supersedes the CPU counts that might be specified using the `systemReserved` and `kubeReserved` parameters.
 
 .Procedure
 

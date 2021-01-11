@@ -1,50 +1,35 @@
 // Module included in the following assemblies:
 // TODO
 // * networking/TBD
+// * networking/load-balancing-openstack.adoc
 // For thinking and reviewing, adding to networking/load-balancing-openstack.adoc
 
 [id="nw-osp-configuring-external-load-balancer_{context}"]
 = Configuring an external load balancer
 
-You can configure a {product-title} cluster on {rh-openstack-first} to use an external load balancer.
+You can configure a {product-title} cluster on {rh-openstack-first} to use an external load balancer in place of the default load balancer.
 
 // Maybe an About mod in support
 
 .Prerequisites
 
-* On your load balancer, ports 6443, 443, and 80 must be available to any users of your system.
+* On your load balancer, TCP over ports 6443, 443, and 80 must be available to any users of your system.
+
+** The {product-title} API uses port 6443. 
+
+** Cluster applications use ports 443 and 80.
+
 * On your load balancer, port 22623, which is used to serve ignition start-up configurations to nodes, is not exposed outside of the cluster.
+
+* Your load balancer must be able to access every machine in your cluster. Methods to allow this access include:
+** Creating the load balancer on a subnet that is in the cluster's network, and then attaching a router interface to the subnet from an `OpenShift-external-router` object.
+** Attaching floating IP addresses to machines that use the load balancer.
 
 .Procedure
 
-// TODO: network formatting... style guide.
-. On your {rh-openstack} deployment, add floating IP addresses to all master nodes. For example:
+. Enable access to the cluster from your load balancer on ports 6443, 443, and 80.
 +
-[source,terminal]
-----
-$ openstack floating ip create --port master-port-0 <public_network>
-----
-+
-[source,terminal]
-----
-$ openstack floating ip create --port master-port-1 <public_network>
-----
-+
-[source,terminal]
-----
-$ openstack floating ip create --port master-port-2 <public_network>
-----
-
-. Find the floating IP addresses that are associated with your nodes:
-+
-[source,terminal]
-----
-$ openstack server list
-----
-
-. Use the floating IP addresses for the nodes to enable access to the cluster from your load balancer on ports 6443, 443, and 80.
-+
-As an example, see this HAProxy configuration for port 6443:
+As an example, note this HAProxy configuration:
 +
 .A section of a sample HAProxy configuration
 [source,text]
@@ -55,45 +40,39 @@ listen my-cluster-api-6443
     mode tcp
     balance roundrobin
     server my-cluster-master-2 192.0.2.2:6443 check
-    server my-cluster-master-0 192.0.2.0:6443 check
+    server my-cluster-master-0 192.0.2.3:6443 check
     server my-cluster-master-1 192.0.2.1:6443 check
-...
+listenmy-cluster-apps-443
+        bind 0.0.0.0:443
+        mode tcp
+        balance roundrobin
+        server my-cluster-worker-0 192.0.2.6:443 check
+        server my-cluster-worker-1 192.0.2.5:443 check
+        server my-cluster-worker-2 192.0.2.4:443 check
+listenmy-cluster-apps-80
+        bind 0.0.0.0:80
+        mode tcp
+        balance roundrobin
+        server my-cluster-worker-0 192.0.2.7:80 check
+        server my-cluster-worker-1 192.0.2.9:80 check
+        server my-cluster-worker-2 192.0.2.8:80 check
 ----
 
-. Enable network access to the master nodes from the load balancer network over ports 6443, 443, and 80:
-+
-[source,terminal]
-----
-$ openstack security group rule create master --remote-ip <load_balancer_cidr> --ingress --protocol tcp --dst-port 6443
-----
-+
-[source,terminal]
-----
-$ openstack security group rule create master --remote-ip <load_balancer_cidr> --ingress --protocol tcp --dst-port 443
-----
-+
-[source,terminal]
-----
-$ openstack security group rule create master --remote-ip <load_balancer_cidr> --ingress --protocol tcp --dst-port 80
-----
-+
-[NOTE]
-====
-You can specify specific IP addresses by using `/32` in the load balancer CIDR argument.
-====
-
-. Add a record to your DNS server for the load balancer. For example:
+. Add records to your DNS server for the cluster API and apps over the load balancer. For example:
 +
 [source,dns]
 ----
 <load_balancer_ip_address> api.<cluster_name>.<base_domain>
+<load_balancer_ip_address> apps.<cluster_name>.<base_domain>
 ----
 
-. From a command line, use `curl` to verify that the external load balancer and DNS configuration are operational. For example:
+. From a command line, use `curl` to verify that the external load balancer and DNS configuration are operational. 
+
+.. Verify that the cluster API is accessible:
 +
 [source,terminal]
 ----
-curl https://<loadbalancer_ip_address>:6443/version --insecure
+$ curl https://<loadbalancer_ip_address>:6443/version --insecure
 ----
 +
 If the configuration is correct, you receive a JSON object in response:
@@ -111,4 +90,36 @@ If the configuration is correct, you receive a JSON object in response:
   "compiler": "gc",
   "platform": "linux/amd64"
 }
+----
+
+.. Verify that cluster applications are accessible:
++
+[NOTE]
+====
+You can also verify application accessibility by opening the {product-title} Console in a web browser.
+====
++
+[source, terminal]
+----
+$ curl http://console-openshift-console.apps.<cluster_name>.<base_domain> -I -L --insecure
+----
++
+If the configuration is correct, you receive an HTTP response:
++
+[source,terminal]
+----
+HTTP/1.1 302 Found
+content-length: 0
+location: https://console-openshift-console.apps.<cluster-name>.<base domain>/
+cache-control: no-cacheHTTP/1.1 200 OK
+referrer-policy: strict-origin-when-cross-origin
+set-cookie: csrf-token=39HoZgztDnzjJkq/JuLJMeoKNXlfiVv2YgZc09c3TBOBU4NI6kDXaJH1LdicNhN1UsQWzon4Dor9GWGfopaTEQ==; Path=/; Secure
+x-content-type-options: nosniff
+x-dns-prefetch-control: off
+x-frame-options: DENY
+x-xss-protection: 1; mode=block
+date: Tue, 17 Nov 2020 08:42:10 GMT
+content-type: text/html; charset=utf-8
+set-cookie: 1e2670d92730b515ce3a1bb65da45062=9b714eb87e93cf34853e87a92d6894be; path=/; HttpOnly; Secure; SameSite=None
+cache-control: private
 ----

@@ -22,7 +22,7 @@ You can configure a {product-title} cluster on {rh-openstack-first} to use an ex
 * On your load balancer, port 22623, which is used to serve ignition start-up configurations to nodes, is not exposed outside of the cluster.
 
 * Your load balancer must be able to access every machine in your cluster. Methods to allow this access include:
-** Creating the load balancer on a subnet that is in the cluster's network, and then attaching a router interface to the subnet from an `OpenShift-external-router` object.
+** Attaching the load balancer to the cluster's machine subnet.
 ** Attaching floating IP addresses to machines that use the load balancer.
 
 .Procedure

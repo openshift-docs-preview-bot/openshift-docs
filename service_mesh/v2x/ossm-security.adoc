@@ -7,6 +7,13 @@ toc::[]
 
 If your service mesh application is constructed with a complex array of microservices, you can use {ProductName} to customize the security of the communication between those services. The infrastructure of {product-title} along with the traffic management features of {ProductShortName} can help you manage the complexity of your applications and provide service and identity security for microservices.
 
+[id="ossm-security-smcp_{context}"]
+== Securing your control plane
+
+Add your project to the xref:../../service_mesh/v2x/installing-ossm.adoc#ossm-member-roll-modify_installing-ossm[`ServiceMeshMemberRoll` resource].
+
+After you xref:../../networking/network_policy/about-network-policy.adoc#about-network-policy-next-steps
+
 include::modules/ossm-security-mtls.adoc[leveloffset=+1]
 
 include::modules/ossm-security-cipher.adoc[leveloffset=+1]

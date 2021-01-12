@@ -39,7 +39,7 @@ endif::[]
 
 |Operating System
 |
-|The primary operating system that is selected for the virtual machine. Selecting an operating system automatically selects the default *Flavor* and *Workload Profile* for that operating system.
+|The primary operating system that is selected for the virtual machine. Selecting an operating system automatically selects the default *Flavor* and *Workload Type* for that operating system.
 
 |Flavor
 |small, medium, large, tiny, Custom

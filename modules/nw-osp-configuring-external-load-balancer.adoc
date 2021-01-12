@@ -17,7 +17,7 @@ You can configure a {product-title} cluster on {rh-openstack-first} to use an ex
 
 ** The {product-title} API uses port 6443. 
 
-** Cluster applications use ports 443 and 80.
+* Load balance the application ports, 443 and 80, between all of the compute nodes.
 
 * On your load balancer, port 22623, which is used to serve ignition start-up configurations to nodes, is not exposed outside of the cluster.
 

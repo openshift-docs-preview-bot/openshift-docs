@@ -15,7 +15,7 @@ You can configure a {product-title} cluster on {rh-openstack-first} to use an ex
 
 * On your load balancer, TCP over ports 6443, 443, and 80 must be available to any users of your system.
 
-** The {product-title} API uses port 6443. 
+* Load balance the API port, 6443, between each of the control plane nodes.
 
 * Load balance the application ports, 443 and 80, between all of the compute nodes.
 

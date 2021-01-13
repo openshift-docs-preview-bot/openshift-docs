@@ -1,0 +1,63 @@
+// Module included in the following assemblies:
+//
+// * networking/ovn_kubernetes_network_provider/deploying-egress-router-ovn-redirection.adoc
+
+[id="nw-egress-router-redirect-mode-ovn_{context}"]
+= Deploying an egress router pod in redirect mode
+
+You can deploy an egress router pod to redirect traffic from its own reserved source IP address to one or more destination IP addresses.
+
+After you add an egress router pod, the client pods that need to use the reserved source IP address must be modified to connect to the egress router rather than connecting directly to the destination IP.
+
+.Prerequisites
+
+* Install the OpenShift CLI (`oc`).
+* Log in as a user with `cluster-admin` privileges.
+
+.Procedure
+
+. Create a network attachment definition.
+
+. Create an egress router pod.
+
+. To ensure that other pods can find the IP address of the egress router pod, create a service that uses the egress router pod, as in the following example:
++
+[source,yaml]
+----
+apiVersion: v1
+kind: Service
+metadata:
+  name: egress-1
+spec:
+  ports:
+  - name: http
+    port: 80
+  - name: https
+    port: 443
+  type: ClusterIP
+  selector:
+    name: egress-router-pod
+----
++
+After you create the service, your pods can connect to the service. Their connections are redirected to the corresponding ports on the destination IP address and the connections originate from the reserved source IP address.
+
+.Verification steps
+
+To verify that the egress router pod started and Multus attached a second network interface, complete the following procedure:
+
+* View the events for the egress router pod:
++
+[source,terminal]
+----
+$ oc get events --field-selector involvedObject.name=egress-router-pod
+----
++
+If the pod references the network attachment definition, the previous command returns output that is similar to the following:
++
+[source,text]
+----
+LAST SEEN   TYPE     REASON           OBJECT                  MESSAGE
+5m4s        Normal   Scheduled        pod/egress-router-pod   Successfully assigned default/egress-router-pod to ci-ln-9x2bnsk-f76d1-j2v6g-worker-c-24g65
+5m3s        Normal   AddedInterface   pod/egress-router-pod   Add eth0 [10.129.2.31/23]
+5m3s        Normal   AddedInterface   pod/egress-router-pod   Add net1 [192.168.12.99/24] from default/egress-router-redirect
+----

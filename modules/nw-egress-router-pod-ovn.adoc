@@ -1,0 +1,40 @@
+// Module included in the following assemblies:
+//
+// * networking/ovn_kubernetes_network_provider/deploying-egress-router-ovn-redirection.adoc
+
+ifeval::["{context}" == "deploying-egress-router-cni-redirection"]
+:redirect:
+:router-type: redirect
+:image-name: FIXME
+endif::[]
+
+[id="nw-egress-router-cni-pod_{context}"]
+= Egress router pod specification for {router-type} mode
+
+After you create a network attachment definition, you add a pod that references the definition.
+
+.Example egress router pod specification
+[source,yaml,subs="attributes+"]
+----
+apiVersion: v1
+kind: Pod
+metadata:
+  name: egress-router-pod
+  annotations:
+    k8s.v1.cni.cncf.io/networks: egress-router-redirect  <.>
+spec:
+  containers:
+    - name: egress-router-pod
+      command: FIXME ["/bin/bash", "-c", "sleep 999999999"]
+      image: {image-name}
+      securityContext: FIXME # This needs to be privileged?
+        privileged: true
+----
+<.> The specified network must match the name of the network attachment definition. You can specify a namespace, interface name, or both, by replacing the values in the following pattern: `<namespace>/<network>@<interface>`. By default, Multus adds interface names such as `net1`, `net2`, and so on.
+
+// Clear temporary attributes
+:!router-type:
+:!image-name:
+ifdef::redirect[]
+:!redirect:
+endif::[]

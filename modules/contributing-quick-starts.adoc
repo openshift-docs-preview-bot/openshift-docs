@@ -1,0 +1,38 @@
+// Module included in the following assemblies:
+//
+// * web_console/creating-quick-start-tutorials.adoc
+
+[id="contributing-quick-starts_{context}"]
+= Contributing quick starts
+
+In {product-title} 4.7, a quick start custom resource is added. This allows Operators and administrators to contribute new quick starts to the cluster beyond the out-of-the-box set. Typically, quick starts for Operators are created by the Operator itself after the Operator is installed. In a few cases, out-of-the-box quick starts that guide administrators through the process of installing an operator are available. These quick starts must be created before Operator installation through Operator Hub.
+
+.Procedure
+
+When the quick start is complete and the content guidelines are applied, contribute your quick start to the `quickstarts` folder in the link:https://github.com/openshift/console-operator/tree/master/quickstarts[console-operator] repository.
+
+. Add the quick start YAML to the `quickstarts` folder. Quick start resources in the `console-operator` repository must contain the following cluster profile annotations:
++
+[source,yaml]
+----
+    include.release.openshift.io/ibm-cloud-managed: "true"
+    include.release.openshift.io/self-managed-high-availability: "true"
+    include.release.openshift.io/single-node-developer: "true"
+----
+
+. Open a pull request, requesting review from `@jhadvig` and `@spadgett`.
+
+
+[id="viewing-quick-start-api-documentation_{context}"]
+== Viewing the quick start API documentation
+
+.Procedure
+
+. To see the quick start API documentation, run:
++
+[source,terminal]
+----
+$ oc explain consolequickstarts
+----
+
+Run `oc explain -h` for more information about `oc explain` usage.

@@ -1,0 +1,55 @@
+////
+Module included in the following assemblies:
+-service_mesh/v2x/ossm-security.adoc
+////
+
+[id="ossm-vs-istio_{context}"]
+= Role Based Access Control (RBAC)
+
+Role-based access control (RBAC) objects determine whether a user is allowed to perform a given action within a project. You can define mesh-, namespace-, and workload-wide access control for your workloads in the mesh. 
+
+To configure RBAC, create an `AuthorizationPolicy` custom resource in the namespace for which you are configuring access. If you are configuring mesh-wide access, use `istio-system`. The namespace must match your `metadata.namespace` field.
+
+An authorization policy includes a selector, an action, and a list of rules:
+
+* The `selector` field specifies the target of the policy.
+* The `action` field specifies whether to allow or deny the request.
+* The `rules` specify when to trigger the action.
+** The `from` field in the rules specifies the sources of the request.
+** The `to` field in the rules specifies the operations of the request.
+** The `when` field specifies the conditions needed to apply the rule.
+
+== Allowing only authenticated users
+
+The following example shows how to allow only authenticated users to access a workflow,  following example 
+
+[source,yaml]
+----
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+ name: httpbin
+ namespace: bookinfo
+spec:
+ selector:
+   matchLabels:
+     app: httpbin
+     version: v1
+ action: ALLOW
+ rules:
+ - from:
+   - source:
+       principals: ["*"]
+   to:
+   - operation:
+       methods: ["GET", "POST"]
+---
+
+
+
+Run the following command once you have written your custom resource to add your custom resource to your namespace.
+
+[source,terminal]
+----
+oc create -n <namespace> -f <path_to_yaml> 
+----

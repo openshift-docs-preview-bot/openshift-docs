@@ -21,7 +21,7 @@ An authorization policy includes a selector, an action, and a list of rules:
 
 == Allowing only authenticated users
 
-The following example shows how to allow only authenticated users to access a workflow,  following example 
+The following example shows how to allow only authenticated users to access a workflow. 
 
 [source,yaml]
 ----

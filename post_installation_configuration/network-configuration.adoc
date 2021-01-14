@@ -91,4 +91,10 @@ include::modules/router-performance-optimizations.adoc[leveloffset=+2]
 
 You can configure some aspects of a {product-title} on {rh-openstack-first} cluster after installation.
 
-include::modules/installation-osp-configuring-api-floating-ip.adoc[leveloffset=+1]
+include::modules/installation-osp-configuring-api-floating-ip.adoc[leveloffset=+2]
+
+include::modules/networking-osp-preparing-for-sr-iov.adoc[leveloffset=+2]
+
+include::modules/networking-osp-enabling-metadata.adoc[leveloffset=+3]
+
+include::modules/networking-osp-enabling-vfio-noiommu.adoc[leveloffset=+3]

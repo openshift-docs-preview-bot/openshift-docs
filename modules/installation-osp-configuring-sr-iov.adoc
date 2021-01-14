@@ -18,8 +18,6 @@ If your {rh-openstack-first} deployment supports link:https://access.redhat.com/
 If you are unsure about what your cluster supports, review the {product-title} SR-IOV hardware networks documentation.
 ====
 
-* You installed the SR-IOV Network Operator on your cluster.
-
 .Procedure
 
 . On a command line, create a {rh-openstack} network:
@@ -61,5 +59,3 @@ $ openstack port create radio_port --vnic-type direct --network radio --fixed-ip
 ----
 $ openstack server create --image <infrastructure_ID>-rhcos --flavor ocp --user-data <ocp project>/build-artifacts/worker.ign --nic port-id=<os_port_worker_0 ID> --nic port-id=<radio_port_ID> --config-drive true worker-<worker_ID>.<cluster_name>.<cluster_domain>
 ----
-
-Your cluster can now run compute machines on an SR-IOV network.

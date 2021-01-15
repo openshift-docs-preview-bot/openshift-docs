@@ -1,0 +1,38 @@
+[id="verifying-cluster-network-connectivity"]
+= Verifying connectivity to an endpoint
+include::modules/common-attributes.adoc[]
+:context: verifying-connectivity-endpoint
+
+toc::[]
+
+The `connectivity_check_controller` orchestrates connectivity verification checks in a {product-title} cluster. The results from the most recent connectivity checks are stored in `PodNetworkConnectivity` objects in the `openshift-network-diagnostics` namespace.
+
+The Cluster Network Operator runs a controller that performs a connectivity health check between resources within your cluster. By reviewing the results of the health checks, you can diagnose connection problems or eliminate network connectivity as the cause of an issue that you are investigating.
+
+= Implementation of connection health checks
+
+The Cluster Network Operator (CNO) deploys several resources to the cluster to send and receive connectivity health checks:
+
+Health check source:: A single pod replica set managed by a `Deployment` object.
+
+Health check target:: A pod deployed on every node in the cluster listens for inbound health checks.
+
+= Health checks configured by the connectivity_check_controller
+
+TCP test.
+
+To verify what cluster resources are reachable, the following connectivity tests are performed for the cluster API services:
+
+* kube-apiserver service
+* kube-apiserver endpoints
+* openshift-apiserver service
+* openshift-apiserver endpoints
+* Load balancers
+
+To verify that services and service endpoints are reachable on every node in the cluster, the following connectivity tests are performed:
+
+* Health check target service
+* Health check target endpoints
+
+include::modules/nw-pod-network-connectivity-check-object.adoc[leveloffset=+1]
+include::modules/nw-pod-network-connectivity-verify.adoc[leveloffset=+1]

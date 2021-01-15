@@ -6,7 +6,7 @@
 [id="networking-osp-enabling-vfio-noiommu_{context}"]
 = Enabling the No-IOMMU Operator for the {rh-openstack} VFIO driver
 
-You can apply a machine config to your machine pool that enables the No-IOMMU Operator for the {rh-openstack} virtual function I/O (VFIO) driver.
+You can apply a machine config to your machine pool that enables the No-IOMMU Operator for the {rh-openstack-first} virtual function I/O (VFIO) driver. The {rh-openstack} vfio-pci driver requires this Operator.
 
 .Procedure
 

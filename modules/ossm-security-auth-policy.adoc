@@ -45,11 +45,9 @@ spec:
        methods: ["GET", "POST"]
 ---
 
-
-
 Run the following command once you have written your custom resource to add your custom resource to your namespace.
 
 [source,terminal]
 ----
-oc create -n <namespace> -f <path_to_yaml> 
+oc create -n <namespace> -f <path_to_yaml_file> 
 ----

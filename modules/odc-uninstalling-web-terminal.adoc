@@ -5,7 +5,10 @@
 [id="odc-uninstalling-web-terminal_{context}"]
 = Uninstalling the web terminal
 
-To uninstall the web terminal, you must first delete the components and Custom Resources (CRs) that were added by default when you installed the Operator, and then uninstall the *Web Terminal* Operator.
+Uninstalling the web terminal is a two-step process:
+
+. Delete the components and Custom Resources (CRs) that were added by default when you installed the Operator.
+. Uninstall the *Web Terminal* Operator.
 
 Uninstalling only the *Web Terminal* Operator will not remove any of its custom resource definitions or managed resources created by default when the Operator is installed. These components must be manually uninstalled for security purposes. It also allows you to save cluster resources as terminals cannot be idled when the Operator is uninstalled.
 

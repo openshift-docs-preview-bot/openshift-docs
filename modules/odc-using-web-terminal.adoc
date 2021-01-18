@@ -12,10 +12,10 @@ After the *Web Terminal* Operator is installed, you can use the web terminal as 
 +
 [NOTE]
 ====
-The `DevWorkspace` CR is created only if it does not already exist.
+* The `DevWorkspace` CR is created only if it does not already exist.
+* The `openshift-terminal` project is the default project used for cluster administrators. They do not have the option to choose another project.
 ====
 +
-For cluster administrators, by default, the `openshift-terminal` project is used and they do not have the option to choose another project.
 . Click *Start* to initialize the web terminal using the selected project.
 
 After the web terminal is initialized, you can use the pre-installed CLI tools like `oc`, `kubectl`, `odo`, `kn`, `tkn`, `helm`, `kubens`, and `kubectx` in the web terminal.

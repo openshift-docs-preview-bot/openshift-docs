@@ -293,14 +293,14 @@ $ oc set triggers --help
 
 [NOTE]
 ====
-`ephemeral-storage` is available only if your administrator enabled the xref:../../install_config/configuring_ephemeral.adoc#install-config-configuring-ephemeral-storage[ephemeral storage] technology preview. This feature is disabled by default.
+The ability to limit ephemeral storage is available only if an administrator enabled the xref:../../install_config/configuring_ephemeral.adoc#install-config-configuring-ephemeral-storage[ephemeral storage] technology preview. This feature is disabled by default.
 ====
 
-A deployment is completed by a deploy pod that consumes resources (memory, CPU, and ephemeral storage) on a
-worker node like other usual pods. By default, a deploy pod consumes unbounded node resources on the scheduled worker node. Usually, it's no problem, because the deploy pod consumes trivial resources and it runs during short deployment period. However, if a project specifies default container limits, then pods inluding the deploy pod consume resources up to those limits.
+A deployment is completed by a deployment pod that consumes resources (memory, CPU, and ephemeral storage) on a
+compute node like other usual pods. By default, a deployment pod consumes unbounded node resources on the scheduled compute node. Usually, this unbounded resource consumption does not cause problems, because deployment pods consume a small amount of resources and run for a short period. However, if a project specifies default container limits, then pods including the deployment pod consume resources up to those limits.
 
-You can also limit resource use by specifying resource limits as part of the
-deployment strategy. Deployment resources for a deploy pod can be used with the Recreate,
+You can also limit resource used by a deployment pod by specifying resource limits as part of the
+deployment strategy in the deployment configuration. Resource limits for a deployment pod can be used with the Recreate,
 Rolling, or Custom deployment strategies.
 
 In the following example, each of `resources`, `cpu`, `memory`, and `ephemeral-storage` is
@@ -320,7 +320,7 @@ resources:
 <1> `cpu` is in CPU units: `100m` represents 0.1 CPU units (100 * 1e-3).
 <2> `memory` is in bytes: `256Mi` represents 268435456 bytes (256 * 2 ^ 20).
 <3> `ephemeral-storage` is in bytes: `1Gi` represents 1073741824 bytes (2 ^ 30).
-This applies only if your administrator enabled the xref:../../install_config/configuring_ephemeral.adoc#install-config-configuring-ephemeral-storage[ephemeral storage] technology preview.
+The `ephemeral-storage` parameter is available only if an administrator enabled the xref:../../install_config/configuring_ephemeral.adoc#install-config-configuring-ephemeral-storage[ephemeral storage] technology preview.
 ====
 
 However, if a quota has been defined for your project, one of the following two

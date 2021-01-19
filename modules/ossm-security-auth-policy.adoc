@@ -19,6 +19,12 @@ An authorization policy includes a selector, an action, and a list of rules:
 ** The `to` field in the rules specifies the operations of the request.
 ** The `when` field specifies the conditions needed to apply the rule.
 
+== Create a role for intra-project communication
+
+== Create a role for the ingress gateway
+
+== Set restricted access
+
 You can deny requests from any source that is not in the `bookinfo` namespace with the following `AuthorizationPolicy` custom resource example.
 
 [source,yaml]
@@ -51,7 +57,7 @@ apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
   name: allow-all
-  namespace: default
+  namespace: bookinfo
 spec:
   action: ALLOW
   rules:

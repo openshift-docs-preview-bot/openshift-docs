@@ -1,0 +1,79 @@
+// Module included in the following assemblies:
+//
+// * windows_containers/creating_windows_machinesets/creating-windows-machineset-vsphere.adoc
+
+[id="windows-machineset-vsphere_{context}"]
+= Sample YAML for a Windows MachineSet object on vSphere
+
+This sample YAML defines a Windows `MachineSet` object running on VMware vSphere that the Windows Machine Config Operator (WMCO) can react upon.
+
+[source,yaml]
+----
+apiVersion: machine.openshift.io/v1beta1
+kind: MachineSet
+metadata:
+  labels:
+    machine.openshift.io/cluster-api-cluster: <infrastructure_id> <1>
+  name: <windows_machine_set_name> <2>
+  namespace: openshift-machine-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      machine.openshift.io/cluster-api-cluster: <infrastructure_id> <1>
+      machine.openshift.io/cluster-api-machineset: <windows_machine_set_name> <2>
+  template:
+    metadata:
+      labels:
+        machine.openshift.io/cluster-api-cluster: <infrastructure_id> <1>
+        machine.openshift.io/cluster-api-machine-role: worker
+        machine.openshift.io/cluster-api-machine-type: worker
+        machine.openshift.io/cluster-api-machineset: <windows_machine_set_name> <2>
+        machine.openshift.io/os-id: Windows <3>
+    spec:
+      metadata:
+        labels:
+          node-role.kubernetes.io/worker: "" <4>
+      providerSpec:
+        value:
+          apiVersion: vsphereprovider.openshift.io/v1beta1
+          credentialsSecret:
+            name: vsphere-cloud-credentials
+          diskGiB: 128
+          kind: VSphereMachineProviderSpec
+          memoryMiB: 16384
+          metadata:
+            creationTimestamp: null
+          network:
+            devices:
+            - networkName: "<vm_network_name>" <5>
+          numCPUs: 4
+          numCoresPerSocket: 1
+          snapshot: ""
+          template: <windows_vm_template_name> <6>
+          userDataSecret:
+            name: worker-user-data-managed <7>
+          workspace:
+             datacenter: <vcenter_datacenter_name> <8>
+             datastore: <vcenter_datastore_name> <9>
+             folder: <vcenter_vm_folder_path> <10>
+             resourcepool: <vsphere_resource_pool> <11>
+             server: <vcenter_server_ip> <12>
+----
+<1> Specify the infrastructure ID that is based on the cluster ID that you set when you provisioned the cluster. You can obtain the infrastructure ID by running the following command:
++
+[source,terminal]
+----
+$ oc get -o jsonpath='{.status.infrastructureName}{"\n"}' infrastructure cluster
+----
+<2> Specify the Windows machine set name. Windows machine names on vSphere cannot be more than 15 characters long. The machine set name, therefore, cannot be more than 9 characters long, due to the way machine names are generated from it.
+<3> Configure the machine set as a Windows machine.
+<4> Configure the Windows node as a compute machine.
+<5> Specify the vSphere VM network to deploy the machine set to.
+<6> Specify the Windows vSphere VM template to use, such as `user-5ddjd-rhcos`.
+<7> Created by the WMCO when it is configuring the first Windows machine. After that, the `windows-user-data-managed` is available for all subsequent machine sets to consume.
+<8> Specify the vCenter Datacenter to deploy the machine set on.
+<9> Specify the vCenter Datastore to deploy the machine set on.
+<10> Specify the path to the vSphere VM folder in vCenter, such as `/dc1/vm/user-inst-5ddjd`.
+<11> Specify the vSphere resource pool for your Windows VMs.
+<12> Specify the vCenter server IP or fully qualified domain name.

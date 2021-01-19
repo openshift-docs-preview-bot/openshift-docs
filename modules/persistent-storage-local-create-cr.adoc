@@ -58,11 +58,16 @@ example uses the node host names, obtained from `oc get node`. If a value is not
 defined, then the Local Storage Operator will attempt to find matching disks
 on all available nodes.
 <3> The volume mode, either `Filesystem` or `Block`, defining the type of the
-local volumes.
+local volumes. 
 <4> The file system that is created when the local volume is mounted for the
 first time.
 <5> The path containing a list of local storage devices to choose from.
 <6> Replace this value with your actual local disks filepath to the LocalVolume resource, such as `/dev/xvdg`. PVs are created for these local disks when the provisioner is deployed successfully.
++
+[NOTE]
+====
+If you are creating a local volume for cluster logging or {product-title} Monitoring, do not use a raw block volume (`volumeMode: block`) because Elasticsearch cannot use raw block volumes.
+====
 +
 .Example: Block
 [source,yaml]

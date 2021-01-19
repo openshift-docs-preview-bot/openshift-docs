@@ -19,11 +19,11 @@ An authorization policy includes a selector, an action, and a list of rules:
 ** The `to` field in the rules specifies the operations of the request.
 ** The `when` field specifies the conditions needed to apply the rule.
 
-== Create a role for intra-project communication
+== Configure intra-project communication
 
-== Create a role for the ingress gateway
+You can use authorization policies to configure your control plane to allow or deny the traffic communicating with your mesh or services in your mesh. 
 
-== Set restricted access
+=== Restrict access to services outside a namespace
 
 You can deny requests from any source that is not in the `bookinfo` namespace with the following `AuthorizationPolicy` custom resource example.
 
@@ -46,8 +46,7 @@ spec:
        notNamespaces: ["bookinfo"]
 ----
 
-
-== Creating allow-all and default deny-all authorization policies
+=== Creating allow-all and default deny-all authorization policies
 
 The following example shows an allow-all authorization policy that allows full access to all workloads in the default namespace.
 
@@ -64,7 +63,7 @@ spec:
   - {}
 ----
 
-The following example shows a policy that doesn’t allow any access to all workloads in the admin namespace.
+The following example shows a policy that doesn’t allow any access to all workloads in the `bookinfo` namespace.
 
 [source,yaml]
 ----
@@ -72,16 +71,34 @@ apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
   name: deny-all
-  namespace: admin
+  namespace: bookinfo
 spec:
   {}
 ----
 
-== Authorizing based on identity
+== Create a role for the ingress gateway
 
-The following example shows how to allow only authenticated users to access a workflow. 
+== Set restricted access with JWT
 
-To 
+[source,yaml]
+----
+apiVersion: "security.istio.io/v1beta1"
+kind: "RequestAuthentication"
+metadata:
+  name: "jwt-example"
+  namespace: bookinfo
+spec:
+  selector:
+    matchLabels:
+      app: httpbin
+  jwtRules:
+  - issuer: "testing@secure.istio.io"
+    jwksUri: "https://raw.githubusercontent.com/istio/istio/release-1.8/security/tools/jwt/samples/jwks.json"
+----
+
+=== Authorizing based on identity
+
+You can further restrict who can see workflows. The following example shows how to allow only authenticated users to access a workflow. 
 
 [source,yaml]
 ----

@@ -1,0 +1,159 @@
+// Module included in the following assemblies:
+//
+// * operators/admin/managing-custom-catalogs.adoc
+
+[id="olm-accessing-images-private-registries_{context}"]
+= Accessing images for Operators from private registries
+
+If certain images relevant to Operators managed by Operator Lifecycle Manager (OLM) are hosted in an authenticated container image registry, also known as a private registry, OLM and OperatorHub are unable to pull the images by default . To enable access, you can create a pull secret that contains the authentication credentials for the registry.
+
+By referencing one or more secrets in a catalog source, some of these required images can be pulled for use in OperatorHub, while other images require updates to the global cluster pull secret.
+
+The following types of images should be considered when determining whether Operators managed by OLM have appropriate pull access:
+
+Index or catalog images:: Index images and catalog images are containerized snapshots of an entire catalog. Index images reference bundle images. If an index or catalog image is hosted in a private registry, OperatorHub can use a secret to enable pull access.
+
+Bundle images:: Operator bundle images are containerized Kubernetes manifests and Operator metadata that represent a unique version of an Operator. If any bundle images referenced in a catalog are hosted in one or more private registries, OperatorHub can use one or more secrets to enable pull access.
+
+Operator and Operand images:: If an Operator subscribed from a catalog uses a private image, either for the Operator image itself or one of the Operand images it manages, the Operator will fail to install because the deployment will not have access to the required registry authentication. Referencing secrets in a catalog source does not address this use case. Instead, the authentication details must be added to the global cluster pull secret in the `openshift-config` project.
+
+.Prerequisites
+
+* At least one of the following hosted in a private registry:
+** An index image or catalog image.
+** An Operator bundle image.
+** An Operator or Operand image.
+
+.Procedure
+
+. Create a secret for each required private registry.
+
+.. Log in to the private registry to create or update your registry credentials file:
++
+[source,terminal]
+----
+$ podman login <registry>:<port>
+----
++
+[NOTE]
+====
+The file path of your registry credentials can be different depending on the container tool used to log in to the registry. For the `podman` CLI, the default location is `${XDG_RUNTIME_DIR}/containers/auth.json`. For the `docker` CLI, the default location is `/root/.docker/config.json`.
+====
+
+.. It is recommended to include credentials for only one registry per secret, and manage credentials for multiple registries in separate secrets. Multiple secrets can be included in a `CatalogSource` object in later steps, and {product-title} will merge the secrets into a single virtual credentials file for use during an image pull.
++
+A registry credentials file can, by default, store details for more than one registry. Verify the current contents of your file. For example:
++
+.File storing credentials for two registries
+[source,json]
+----
+{
+        "auths": {
+                "registry.redhat.io": {
+                        "auth": "FrNHNydQXdzclNqdg=="
+                },
+                "quay.io": {
+                        "auth": "Xd2lhdsbnRib21iMQ=="
+                }
+        }
+}
+----
++
+Because this file is used to create secrets in later steps, ensure that you are storing details for only one registry per file. This can be accomplished by using either of the following methods:
++
+--
+* Use the `podman logout <registry>` command to remove credentials for additional registries until only the one registry you want remains.
+* Edit your registry credentials file and separate the registry details to be stored in multiple files. For example:
++
+.File storing credentials for one registry
+[source,json]
+----
+{
+        "auths": {
+                "registry.redhat.io": {
+                        "auth": "FrNHNydQXdzclNqdg=="
+                }
+        }
+}
+----
++
+.File storing credentials for another registry
+[source,json]
+----
+{
+        "auths": {
+                "quay.io": {
+                        "auth": "Xd2lhdsbnRib21iMQ=="
+                }
+        }
+}
+----
+--
+
+.. Create a secret that contains the authentication credentials for a private registry:
++
+[source,terminal]
+----
+$ oc create secret generic <secret_name> \
+    --from-file=.dockerconfigjson=<path/to/registry/credentials> \
+    --type=kubernetes.io/dockerconfigjson
+----
++
+Repeat this step to create additional secrets for any other required private registries, updating the `--from-file` flag to specify another registry credentials file path.
+
+. Create or update an existing `CatalogSource` object to reference one or more secrets:
++
+[source,yaml]
+----
+apiVersion: operators.coreos.com/v1alpha1
+kind: CatalogSource
+metadata:
+  name: my-operator-catalog
+  namespace: openshift-marketplace
+spec:
+  sourceType: grpc
+  secrets: <1>
+  - "<secret_1>"
+  - "<secret_2>"
+  image: <registry>:<port>/<namespace>/<image>:<tag>
+  displayName: My Operator Catalog
+  publisher: <publisher_name>
+  updateStrategy:
+    registryPoll:
+      interval: 30m
+----
+<1> Add a `spec.secrets` section and specify any required secrets.
+
+. If any Operator or Operand images referenced by a subscribed Operator requires access to a private registry, add the authentication details to the global cluster pull secret in the `openshift-config` project.
++
+[WARNING]
+====
+Cluster resources must adjust to the new pull secret, which can temporarily limit the usability of the cluster.
+====
+
+.. Extract the `.dockerconfigjson` file from the secret:
++
+[source,terminal]
+----
+$ oc extract secret/pull-secret -n openshift-config --confirm
+----
+
+.. Update the `.dockerconfigjson` file with your authentication credentials for the required private registry or registries and save it as a new file:
++
+[source,terminal]
+----
+$ cat .dockerconfigjson | jq --compact-output \
+    '.auths["<registry>:<port>/<namespace>/"] \//<1>
+    |= . + {"auth":"<token>"}' \//<2>
+    > new_dockerconfigjson
+----
+<1> Replace `<registry>:<port>/<namespace>` with the private registry details.
+<2> Replace `<token>` with your authentication credentials.
+
+.. Update the secret with the new file:
++
+[source,terminal]
+----
+$ oc set data secret/pull-secret -n openshift-config \
+    --from-file=.dockerconfigjson=new_dockerconfigjson
+----

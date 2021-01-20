@@ -15,9 +15,9 @@ An authorization policy includes a selector, an action, and a list of rules:
 * The `selector` field specifies the target of the policy.
 * The `action` field specifies whether to allow or deny the request.
 * The `rules` specify when to trigger the action.
-** The `from` field in the rules specifies the sources of the request.
-** The `to` field in the rules specifies the operations of the request.
-** The `when` field specifies the conditions needed to apply the rule.
+** The `from` field in the rules specifies constraints on the request origin.
+** The `to` field in the rules specifies constraints on request target and parameters.
+** The `when` field specifies additional conditions needed to apply the rule.
 
 == Configure intra-project communication
 
@@ -63,7 +63,7 @@ spec:
   - {}
 ----
 
-The following example shows a policy that doesn’t allow any access to all workloads in the `bookinfo` namespace.
+The following example shows a policy that denies any access to all workloads in the `bookinfo` namespace.
 
 [source,yaml]
 ----
@@ -120,11 +120,4 @@ spec:
    to:
    - operation:
        methods: ["GET", "POST"]
-----
-
-Run the following command once you have written your custom resource to add your custom resource to your namespace. The namespace must match your `metadata.namespace` field.
-
-[source,terminal]
-----
-$ oc create -n <namespace> -f <path_to_yaml_file> 
 ----

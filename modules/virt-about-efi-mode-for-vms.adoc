@@ -1,0 +1,17 @@
+// Module included in the following assemblies:
+//
+// * virt-efi-mode-for-vms.adoc
+
+[id="virt-about-efi-mode-for-vms_{context}"]
+= About EFI mode for virtual machines
+
+`EFI` (Extensible Firmware Interface) is a firmware interface that initializes the hardware components and starts the operating system stored on a hard disk drive when a computer starts.
+
+It stores all the information about initialization and startup in a .efi file, which is stored on a special partition called EFI System Partition (ESP). The ESP also contains the boot loader programs for the operating system installed on the computer.
+
+The ESP allows `EFI` to directly boot the operating system and save the BIOS self-test process, allowing the computer to boot faster.
+
+[NOTE]
+====
+{VirtProductName} only supports a virtual machine (VM) with Secure Boot when using EFI mode. If Secure Boot is not enabled, the VM crashes repeatedly. However, the VM may not support Secure Boot. Prior to booting a VM, verify the VM’s settings support Secure Boot.
+====

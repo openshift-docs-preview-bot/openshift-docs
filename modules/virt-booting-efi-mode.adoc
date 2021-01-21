@@ -1,0 +1,54 @@
+// Module included in the following assemblies:
+//
+// * virt-efi-mode-for-vms.adoc
+
+[id="virt-booting-vms-efi-mode_{context}"]
+= Booting virtual machines in EFI mode
+
+Booting a virtual machine in EFI mode allows for a quicker boot process.
+
+.Procedure
+To boot a VM in EFI Mode:
+
+* Create a .yaml file that defines a VM object or a Virtual Machine Instance (`VMI`) object. Use the firmware section of the example .yaml file:
+
+.Booting in `EFI` mode with secure boot active
+[source,yaml]
+----
+  apiVersion: kubevirt.io/v1
+  kind: VirtualMachineInstance
+  metadata:
+    labels:
+      special: vmi-secureboot
+    name: vmi-secureboot
+  spec:
+    domain:
+      devices:
+        disks:
+        - disk:
+            bus: virtio
+          name: containerdisk
+      features:
+        acpi: {}
+        smm:
+          enabled: true
+      firmware:
+        bootloader:
+          efi:
+            secureBoot: true
+...
+----
+
+* Load the .yaml file in the Command Line Interface (`CLI`). There are corresponding user operations:
+    - In Kubernetes with KubeVirt loaded, use:
++
+[source,terminal]
+----
+$ kubectl create -f my-vm-def-file.yaml
+----
+    - In OpenShift with OpenShift Virtualization loaded, use:
++
+[source,terminal]
+----
+$ oc  create -f my-vm-def-file.yaml
+----

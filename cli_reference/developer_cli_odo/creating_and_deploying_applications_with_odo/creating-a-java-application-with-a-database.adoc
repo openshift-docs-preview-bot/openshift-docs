@@ -23,8 +23,10 @@ include::modules/developer-cli-odo-creating-a-project.adoc[leveloffset=+1]
 
 include::modules/developer-cli-odo-listing-available-services-from-the-operators-installed-on-the-cluster.adoc[leveloffset=+1]
 
+//this should contain a java example
 include::modules/developer-cli-odo-creating-a-service-from-an-operator.adoc[leveloffset=+1]
 
+these should be postres or mariadb
 include::modules/developer-cli-odo-deploying-a-database-in-interactive-mode.adoc[leveloffset=+1]
 
 include::modules/developer-cli-odo-deploying-a-database-manually.adoc[leveloffset=+1]

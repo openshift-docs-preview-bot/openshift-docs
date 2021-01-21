@@ -7,7 +7,7 @@
 
 After the *Web Terminal* Operator is installed, you can use the web terminal as follows:
 
-. Click the image:odc-wto-icon[title="command line terminal icon"] on the upper right of the console to launch the web terminal. An automatically logged in web terminal instance that uses your credentials is displayed at the bottom of the screen.
+. Click the command line terminal icon (image:odc-wto-icon[title="wto icon"]) on the upper right of the console to launch the web terminal. An automatically logged in web terminal instance that uses your credentials is displayed at the bottom of the screen.
 . In the *Command line terminal* pane, select the project, from the *Project* drop-down list, where the `DevWorkspace` CR must be created. By default, the current project is selected.
 +
 [NOTE]

@@ -1,0 +1,48 @@
+[id="virt-creating-and-using-boot-sources"]
+= Creating and using boot sources
+include::modules/virt-document-attributes.adoc[]
+:context: virt-creating-and-using-boot-sources
+toc::[]
+
+A _boot source_ contains a bootable operating system (OS) and all of the configuration settings for the OS, such as drivers.
+
+You use a boot source to create virtual machine templates with specific configurations. These templates can be used to create any number of available virtual machines.
+
+To use boot sources, you must install the latest version of {VirtProductName}.
+
+include::modules/virt-using-supported-boot-source-names.adoc[leveloffset=+1]
+
+// The following content is a duplication of a generic module authored by Lavanya M. for the CNV-9030 story (Adding a boot source). Once this generic module is merged into master, an include:: statement will replace the content in this section.
+
+= Adding a boot source for a virtual machine template
+
+A boot source can be configured for any virtual machine template that you want to use for creating virtual machines or custom templates. When virtual machine templates are configured with a boot source, they are labeled *Available* in the *Templates* tab.
+
+.Procedure
+
+. In the {VirtProductName} console, click *Workloads* -> *Virtualization* from the side menu.
+
+. Click the *Templates* tab.
+
+. Identify the virtual machine template for which you want to configure a boot source. Click *Add source*.
+
+. In the *Add boot source to template* window, click *Select boot source*. Select a method for creating a persistent volume claim (PVC): *Upload local file*, *Import via URL*, *Clone existing PVC*, or *Import via Registry*.
+
+.. Optional: Click *Mount this source as CD-ROM* to add an additional disk that can be customized when you create the virtual machine.
+.. Click *Mount this as a CD-ROM boot source*.
+
+. Enter a value for *Persistent Volume Claim size* to specify the PVC size that is adequate for the uncompressed image and any additional space that is required.
+
+.. Optional: Enter a name for *Source provider* to associate the name with this template.
+
+.. Advanced: Click *Storage class* and select the storage class that is used to create the disk.
+
+.. Advanced: Click *Access mode* and select an access mode for the persistent volume. Supported access modes are: *Single User (RWO)*, *Shared Access (RWX)*, and *Read Only (ROX)*.
+
+.. Advanced: Click *Volume mode* if you want to select *Block* instead of the default value *Filesystem*.
+
+. Click *Save and upload* if you uploaded a local file. Click *Save and import* if you imported content from a URL or the registry. Click *Save and clone* if you cloned an existing PVC.
+
+Your custom virtual machine template with a boot source is listed in the *Templates* tab, and you can create virtual machines by using this template.
+
+include::modules/virt-creating-a-vm-from-a-boot-source.adoc[leveloffset=+1]

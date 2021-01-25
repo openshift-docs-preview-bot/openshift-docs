@@ -5,14 +5,13 @@ include::modules/common-attributes.adoc[]
 
 toc::[]
 
-You can launch an embedded command line terminal instance in the OpenShift web console. You must first install the *Web Terminal* Operator to use the web terminal.
+You can launch an embedded command line terminal instance in the OpenShift web console. You must first install the Web Terminal Operator to use the web terminal.
 
-This terminal instance is pre-installed with common CLI tools for interacting with the cluster, such as `oc`, `kubectl`,`odo`, `kn`, `tkn`, `helm`, `kubens`, and `kubectx`.
-It has the context of the project you are working on and automatically logs you in using your credentials.
+This terminal instance is preinstalled with common CLI tools for interacting with the cluster, such as `oc`, `kubectl`,`odo`, `kn`, `tkn`, `helm`, `kubens`, and `kubectx`. It also has the context of the project you are working on and automatically logs you in using your credentials.
 
 [NOTE]
 ====
-Cluster administrators can access the web terminal only starting from {product-title} 4.7
+Cluster administrators can access the web terminal in {product-title} 4.7 and later.
 ====
 
 include::modules/odc-installing-web-terminal.adoc[leveloffset=+1]

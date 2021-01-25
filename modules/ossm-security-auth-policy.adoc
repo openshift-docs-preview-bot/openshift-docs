@@ -10,6 +10,11 @@ Role-based access control (RBAC) objects determine whether a user or service is 
 
 To configure RBAC, create an `AuthorizationPolicy` custom resource in the namespace for which you are configuring access. If you are configuring mesh-wide access, use `istio-system`. The namespace must match your `metadata.namespace` field.
 
+For example, with RBAC, you can create policies that:
+
+* Allow or deny full access to all workloads in the default namespace.
+* 
+
 An authorization policy includes a selector, an action, and a list of rules:
 
 * The `selector` field specifies the target of the policy.
@@ -21,7 +26,7 @@ An authorization policy includes a selector, an action, and a list of rules:
 
 == Configure intra-project communication
 
-You can use authorization policies to configure your control plane to allow or deny the traffic communicating with your mesh or services in your mesh. 
+You can use `AuthorizationPolicy` to configure your control plane to allow or deny the traffic communicating with your mesh or services in your mesh. 
 
 === Restrict access to services outside a namespace
 
@@ -78,7 +83,29 @@ spec:
 
 == Create a role for the ingress gateway
 
-== Set restricted access with JWT
+You can set an authorization policy to add allow or deny lists based on IP addresses.
+
+[source,yaml]
+----
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: ingress-policy
+  namespace: istio-system
+spec:
+  selector:
+    matchLabels:
+      app: istio-ingressgateway
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+       ipBlocks: ["1.2.3.4", "5.6.7.0/24"]
+----
+
+== Set restricted access with JSON Web Token (JWT)
+
+
 
 [source,yaml]
 ----
@@ -92,32 +119,27 @@ spec:
     matchLabels:
       app: httpbin
   jwtRules:
-  - issuer: "testing@secure.istio.io"
-    jwksUri: "https://raw.githubusercontent.com/istio/istio/release-1.8/security/tools/jwt/samples/jwks.json"
+  - issuer: http://localhost:8080/auth/realms/master
+    jwksUri: "http://keycloak.default.svc:8080/auth/realms/master/protocol/openid-connect/certs"
 ----
 
-=== Authorizing based on identity
-
-You can further restrict who can see workflows. The following example shows how to allow only authenticated users to access a workflow. 
+You must pair that with a 
 
 [source,yaml]
 ----
-apiVersion: security.istio.io/v1beta1
-kind: AuthorizationPolicy
+apiVersion: "security.istio.io/v1beta1"
+kind: "AuthorizationPolicy"
 metadata:
- name: httpbin
- namespace: bookinfo
+  name: "frontend-ingress"
+  namespace: bookinfo
 spec:
- selector:
-   matchLabels:
-     app: httpbin
-     version: v1
- action: ALLOW
- rules:
- - from:
-   - source:
-       principals: ["*"]
-   to:
-   - operation:
-       methods: ["GET", "POST"]
+  selector:
+    matchLabels:
+      app: httpbin
+  action: DENY
+  rules:
+  - from:
+    - source:
+        notRequestPrincipals: ["*"]
 ----
+

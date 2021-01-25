@@ -144,6 +144,11 @@ You can now configure nodes to have more than 26 persistent Cinder volumes in cl
 
 // Link.
 
+[id="ocp-4-7-osp-computeflavor-property-deprecation"]
+==== Deprecation of the computeFlavor property in the install-config.yaml file
+
+The `computeFlavor` property that is used in the `install-config.yaml` file is deprecated. As an alternative, you can now configure machine pool flavors in the `platform.openstack.defaultMachinePlatform` property.
+
 [id="ocp-4-7-web-console"]
 === Web console
 

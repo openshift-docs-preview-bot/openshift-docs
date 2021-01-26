@@ -41,6 +41,13 @@ binding occur. Specify `WaitForFirstConsumer` to delay the binding and provision
 of a PV until after a pod that uses the persistent volume claim (PVC)
 is created. This ensures that the PV meets the pod's scheduling requirements.
 
+[NOTE]
+====
+Virtual Machines use DataVolume disks that are based on locally-stored PVs. Local storage PVs are bound to specific nodes. While the disk image is being prepared for consumption by the virtual machine, it is possible that the virtual machine cannot be scheduled to the node to which the local storage PV was previously pinned.
+
+To solve this problem, use the Kubernetes pod scheduler to bind the PVC to a PV on the correct node. By using a `StorageClass` with `volumeBindingMode` set to `WaitForFirstConsumer`, the binding and provisioning of the PV is delayed until a Pod using the PVC is created.
+====
+
 . Create the `StorageClass` object:
 +
 [source,terminal]
